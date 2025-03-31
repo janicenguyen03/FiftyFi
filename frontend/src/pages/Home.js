@@ -20,7 +20,7 @@ function Home() {
     return (
         <div>
             <h1>Trackify</h1>
-            {/* Total time spent */}
+            {/* Total time spent today*/}
 
             {/* New song listen to recently */}
 

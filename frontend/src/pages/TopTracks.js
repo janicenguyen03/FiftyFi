@@ -8,15 +8,16 @@ function TopTracks() {
     const token = localStorage.getItem("token");
 
     // Top Tracks
+
     useEffect(() => {
         if (!token) return;
 
-        fetch(`http://localhost:5000/api/tracks/top?time-range=${timeRange}`, {
+        fetch(`http://localhost:5000/api/tracks/top?time_range=${timeRange}`, {
             headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => response.json())
         .then((data) => {
-            setTopTracks(data.items || [])
+            setTopTracks(data.topTracks || []);
         })
         .catch(err => console.error('Error fetching top tracks:', err));
     }, [timeRange, token]);
@@ -48,6 +49,30 @@ function TopTracks() {
     return (
         <div>
             <h1>Top Tracks</h1>
+
+            {/* Top tracks list */}
+            <h2>Top Tracks</h2>
+            <select onChange={(e) => {
+                console.log(e.target.value);
+                setTimeRange(e.target.value);
+            }} value={timeRange}>
+                <option value="short_term">Last month</option>
+                <option value="medium_term">Last 6 months</option>
+                <option value="long_term">All time</option>
+            </select>
+            <ul>
+                {topTracks.map((track) => (
+                    <div key={track.id} className="track-card">
+                        <img src={track.image} alt={track.name} />
+                        <h3>{track.name}</h3>
+                        <p>{track.id}</p>
+                        <p>🎤 {track.artists}</p>
+                        <p>📀 {track.album}</p>
+                        <a href={track.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
+                    </div>
+                ))}
+            </ul>
+
             {/* most repeated song */}
             { mostRepeatedTrack.name && (
                 <div>
@@ -67,18 +92,6 @@ function TopTracks() {
                 </div>
             )}
 
-            {/* Top tracks list */}
-            {/* <h2>Top Tracks</h2>
-            <select onChange={(e) => setTimeRange(e.target.value)} value={timeRange}>
-                <option value="short_term">Last 4 weeks</option>
-                <option value="medium_term">Last 6 months</option>
-                <option value="long_term">All time</option>
-            </select>
-            <ul>
-                {topTracks.map((track, index) => (
-                    <li key={index}>{track.name} by {track.artists[0].name}</li>
-                ))}
-            </ul> */}
         </div>
     );
 }
