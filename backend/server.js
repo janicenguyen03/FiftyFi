@@ -28,7 +28,7 @@ app.use('/api/tracks', trackRoutes);
 
 app.get("/login", (req, res) => {
   // const state = generateRandomString(16);
-  const scopes = "user-top-read user-read-recently-played";
+  const scopes = "user-top-read user-read-recently-played user-follow-read user-library-read";
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
       querystring.stringify({
@@ -71,6 +71,33 @@ app.get("/callback", async (req, res) => {
   }
 });
 
+app.get("/api/user", async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+
+        const response = await fetch("https://api.spotify.com/v1/me", {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) {
+            return res.status(response.status).json({ error: "Failed to fetch user data" });
+        }
+
+        const data = await response.json();
+        
+        res.json({
+            name: data.display_name,
+            profilePicture: data.images.length > 0 ? data.images[0].url : null,
+        })
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+    
 app.get("/api/top-tracks", async (req, res) => {
   const { access_token } = req.query;
   const topTracksResponse = await axios.get(
