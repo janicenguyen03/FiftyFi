@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Logout from './pages/Logout';
 import TopTracks from "./pages/TopTracks";
-import './App.css';
 
 function App() {
   return (
@@ -14,6 +14,7 @@ function App() {
         {/* <Route path="/top-artists" element={<TopArtists />} /> */}
         {/* <Route path="/top-genres" element={<TopGenres />} /> */}
         {/* <Route path="/recommendations" element={<Recommendations />} /> */}
+        <Route path="/logout" element={<Logout />} />
       </Routes>
     </Router>
   );
