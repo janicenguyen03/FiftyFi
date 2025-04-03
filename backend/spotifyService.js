@@ -1,9 +1,9 @@
 import axios, { all } from "axios";
 
-const API_BASE_URL = "https://api.spotify.com/v1";
+const API_BASE_URL = "https://api.spotify.com/v1/me";
 
 export const getTopItems = async (token, type, timeRange) => {
-    const url = `${API_BASE_URL}/me/top/${type}?limit=10&time_range=${timeRange}`;
+    const url = `${API_BASE_URL}/top/${type}?limit=10&time_range=${timeRange}`;
     try {
         const response = await axios.get(url, {
             headers: {
@@ -27,7 +27,7 @@ export const getRecentlyPlayed = async (token) => {
     try {
         while (allTracks.length <= maxItems) {
             // console.log(`Fetched so far: ${allTracks.length}`);
-            const url = `${API_BASE_URL}/me/player/recently-played?limit=${limit}&before=${nextBefore}`;
+            const url = `${API_BASE_URL}/player/recently-played?limit=${limit}&before=${nextBefore}`;
             const response = await axios.get(url, {
                 headers: {
                     Authorization: `Bearer ${token}`,

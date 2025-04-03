@@ -47,7 +47,7 @@ function TopTracks() {
     }, [token]);
 
     return (
-        <div>
+        <div className="background text-white">
             <h1>Top Tracks</h1>
 
             {/* Top tracks list */}
@@ -55,7 +55,7 @@ function TopTracks() {
             <select onChange={(e) => {
                 console.log(e.target.value);
                 setTimeRange(e.target.value);
-            }} value={timeRange}>
+            }} value={timeRange} className="btn">
                 <option value="short_term">Last month</option>
                 <option value="medium_term">Last 6 months</option>
                 <option value="long_term">All time</option>
@@ -65,7 +65,6 @@ function TopTracks() {
                     <div key={track.id} className="track-card">
                         <img src={track.image} alt={track.name} />
                         <h3>{track.name}</h3>
-                        <p>{track.id}</p>
                         <p>🎤 {track.artists}</p>
                         <p>📀 {track.album}</p>
                         <a href={track.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
