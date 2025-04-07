@@ -3,7 +3,7 @@ import { getTopItems, getRecentlyPlayed } from "./spotifyService.js";
 export const getTopTracks = async (req, res) => {
     
     const timeRange = req.query['time_range'] || 'short_term';
-    const token = req.session.token;
+    const token = req.session.access_token;
 
     if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
@@ -11,6 +11,8 @@ export const getTopTracks = async (req, res) => {
 
     try {
         const tracks = await getTopItems(token, 'tracks', timeRange);
+        // const items = tracks.items || [];
+
         if (!tracks || tracks.length === 0) {
             return res.status(404).json({ error: "No tracks found" });
         }  
@@ -32,7 +34,7 @@ export const getTopTracks = async (req, res) => {
 
 export const getMostRepeatedTracks = async (req, res) => {
     try {
-        const token = req.session.token;
+        const token = req.session.access_token;
         const recentlyPlayed = await getRecentlyPlayed(token);
         
         let repeatedTracks = {};
@@ -63,7 +65,7 @@ export const getMostRepeatedTracks = async (req, res) => {
 
 export const getMostSkippedTracks = async (req, res) => {
     try {
-        const token = req.session.token;
+        const token = req.session.access_token;
         const recentlyPlayed = await getRecentlyPlayed(token);
 
         let skippedTracks = {};

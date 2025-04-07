@@ -4,8 +4,10 @@ import isAuthenticated from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-router.get('/top', isAuthenticated, getTopTracks);
-router.get('/most-repeated', isAuthenticated, getMostRepeatedTracks);
-router.get('/most-skipped', isAuthenticated, getMostSkippedTracks);
+router.use(isAuthenticated);
+
+router.get('/top', getTopTracks);
+router.get('/most-repeated', getMostRepeatedTracks);
+router.get('/most-skipped', getMostSkippedTracks);
 
 export default router;

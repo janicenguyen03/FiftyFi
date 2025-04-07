@@ -5,46 +5,41 @@ function TopTracks() {
     const [topTracks, setTopTracks] = useState([]);
     const [mostRepeatedTrack, setMostRepeatedTrack] = useState([]);
     const [mostSkippedTrack, setMostSkippedTrack] = useState([]);
-    const token = localStorage.getItem("token");
 
     // Top Tracks
 
     useEffect(() => {
-        if (!token) return;
-
         fetch(`http://localhost:5000/api/tracks/top?time_range=${timeRange}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        })
+            credentials: "include"})
         .then((response) => response.json())
         .then((data) => {
             setTopTracks(data.topTracks || []);
         })
         .catch(err => console.error('Error fetching top tracks:', err));
-    }, [timeRange, token]);
+    }, [timeRange]);
 
     useEffect(() => {
-        if (!token) return;
-
         fetch("http://localhost:5000/api/tracks/most-repeated", {
-            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include"
         })
         .then((response) => response.json())
         .then((data) => {
             setMostRepeatedTrack(data || {})
         })
         .catch(err => console.error('Error fetching most repeated tracks:', err));
-    }, [token]);
+    }, []);
     
     useEffect(() => {
-        if (!token) return;
-
         fetch("http://localhost:5000/api/tracks/most-skipped", {
-            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include"
         })
         .then((response) => response.json())
-        .then((data) => setMostSkippedTrack(data || {}))
+        .then((data) => {
+            setMostSkippedTrack(data || {});
+            console.log(data);
+        })
         .catch(err => console.error('Error fetching most skipped tracks:', err));
-    }, [token]);
+    }, []);
 
     return (
         <div className="background text-white">

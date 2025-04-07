@@ -1,8 +1,5 @@
-import session from "express-session";
-import express from "express";
-
 function isAuthenticated(req, res, next) {
-    if (req.session.access_token || req.session.refresh_token) {
+    if (req.session && req.session.user) {
         console.log("User is authenticated");
         next();
     } else {

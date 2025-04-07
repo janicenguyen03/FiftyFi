@@ -1,4 +1,4 @@
-import axios, { all } from "axios";
+import axios from "axios";
 
 const API_BASE_URL = "https://api.spotify.com/v1/me";
 
