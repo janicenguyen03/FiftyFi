@@ -84,7 +84,7 @@ export const getTrackInsights = async (req, res) => {
                 skippedTracks[trackId] = (skippedTracks[trackId] || 0) + 1;
             }
         }
-                
+        
         const mostRepeated = Object.entries(repeatedTracks).sort((a, b) => b[1] - a[1])[0];
         const mostRepeatedTrack = recentlyPlayed.find(item => item.track.id === mostRepeated[0]);
         const highestCount = mostRepeated[1];

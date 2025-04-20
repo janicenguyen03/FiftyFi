@@ -6,11 +6,23 @@ import { motion } from "framer-motion";
 
 function Home() {
   const navigate = useNavigate();
+  const [step, setStep] = useState(0);
   const [user, setUser] = useState(null);
+
   const [showAnimation, setShowAnimation] = useState(false);
-  const [timeSpent, setTimeSpent] = useState(0);
+
+  const [timePercentage, setTimePercentage] = useState(0);
+  const [timeSpent, setTimeSpent] = useState({});
   const [lastTrack, setLastTrack] = useState({});
+  const [playlistFollowers, setPlaylistFollowers] = useState(0);
+
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (step === 1) {
+      pass
+    };
+  }, []);
 
   // Get user profile info
   useEffect(() => {
@@ -26,6 +38,7 @@ function Home() {
       });
   }, [navigate]);
 
+
   // Get last track played
   useEffect(() => {
     fetch("http://localhost:5000/api/home/latest-track", {
@@ -40,6 +53,7 @@ function Home() {
       );
   }, []);
 
+
   // Get time spent on Spotify
   useEffect(() => {
     fetch("http://localhost:5000/api/home/time-spent", {
@@ -47,12 +61,29 @@ function Home() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setTimeSpent(data.partOfDayPercentage || 0);
+        setTimePercentage(data.partOfDayPercentage || 0);
+        setTimeSpent(data.totalTime || {});
       })
       .catch((err) =>
         console.error("Error fetching most repeated tracks:", err)
       );
   }, []);
+
+
+  // Get playlist followers
+  useEffect(() => {
+    fetch("http://localhost:5000/api/home/playlist-saved-count", {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setPlaylistFollowers(data || 0);
+      })
+      .catch((err) =>
+        console.error("Error fetching most repeated tracks:", err)
+    );
+  }, []);
+
 
   // Check if homepage is visited, if not load the framer motion
   useEffect(() => {
@@ -63,14 +94,17 @@ function Home() {
     }
   }, []);
 
+
   const handleLogout = () => {
     localStorage.removeItem("visitedHome");
     window.location.href = "http://localhost:5000/logout";
   };
 
+
   if (loading) {
     return null;
   }
+
   return (
     <div className="flex flex-col items-center p-6 h-screen background text-neutral-100">
       {user && showAnimation ? (
@@ -145,7 +179,6 @@ function Home() {
 
           {/*  */}
           {/* Total time spent in last 24 hours*/}
-          <p></p>
 
           {/* New song listen to recently */}
 
