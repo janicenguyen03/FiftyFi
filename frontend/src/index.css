@@ -5,12 +5,12 @@
 
 @layer components {
     .background {
-        @apply bg-gradient-to-br from-green-600 to-black;
+        @apply bg-custom-mesh bg-green-base;
     }
     .btn {
-        @apply mb-5 px-6 py-3 text-lg font-medium bg-green-500
-         hover:bg-green-600 hover:shadow-lg  hover:text-gray-100 
-         active:shadow-sm
+        @apply mb-5 px-6 py-3 text-lg font-medium bg-emerald-950
+         hover:bg-emerald-900 hover:shadow-lg hover:shadow-emerald-900 hover:text-neutral-100 
+         active:bg-emerald-800 active:shadow-inner
          transition duration-300 ease-in-out
          rounded-full shadow-md
 

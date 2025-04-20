@@ -1,4 +1,4 @@
-import { getTopItems, getRecentlyPlayed } from "./spotifyService.js";
+import { getTopItems, getRecentlyPlayed } from "../spotifyService.js";
 
 export const getTopTracks = async (req, res) => {
     
@@ -89,11 +89,21 @@ export const getMostSkippedTracks = async (req, res) => {
         const mostSkippedTrack = recentlyPlayed.find(item => item.track.id === mostSkipped[0]);
         const highestSkip = mostSkipped[1];
         
-        res.json({ name: mostSkippedTrack.track.name, 
-            artist: mostSkippedTrack.track.artists[0].name, 
+
+        res.json({ id: mostSkippedTrack.track.id,
+            name: mostSkippedTrack.track.name,
+            artists: mostSkippedTrack.track.artists.map(artist => artist.name).join(", "),
+            album: mostSkippedTrack.track.album.name,
+            image: mostSkippedTrack.track.album.images[0]?.url,
+            spotifyUrl: mostSkippedTrack.track.external_urls.spotify,
+            duration: mostSkippedTrack.track.duration_ms,
             count: highestSkip });
 
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+}
+
+export const getLoveHateTracks = async (req, res) => {
+
 }

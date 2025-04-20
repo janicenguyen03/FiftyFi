@@ -6,14 +6,19 @@ import { motion } from "framer-motion";
 
 function Home() {
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   const [showAnimation, setShowAnimation] = useState(false);
+  const [timeSpent, setTimeSpent] = useState(0);
+  const [lastTrack, setLastTrack] = useState({});
+  const [loading, setLoading] = useState(true);
 
+  // Get user profile info
   useEffect(() => {
     axios
       .get("http://localhost:5000/me", { withCredentials: true })
       .then((response) => {
         setUser(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching user data: ", error);
@@ -21,6 +26,37 @@ function Home() {
       });
   }, [navigate]);
 
+  // Get time spent on Spotify
+  useEffect(() => {
+    fetch("http://localhost:5000/api/home/time-spent", {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setTimeSpent(data || 0);
+        console.log(data);
+      })
+      .catch((err) =>
+        console.error("Error fetching most repeated tracks:", err)
+      );
+  }, []);
+
+  // Get last track played
+  useEffect(() => {
+    fetch("http://localhost:5000/api/home/latest-track", {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setLastTrack(data || {});
+        console.log(data);
+      })
+      .catch((err) =>
+        console.error("Error fetching most repeated tracks:", err)
+      );
+  }, []);
+
+  // Check if homepage is visited, if not load the framer motion
   useEffect(() => {
     const visited = localStorage.getItem("visitedHome");
     if (!visited) {
@@ -32,37 +68,41 @@ function Home() {
   const handleLogout = () => {
     localStorage.removeItem("visitedHome");
     window.location.href = "http://localhost:5000/logout";
-  }
+  };
 
+  if (loading) {
+    return null;
+  }
   return (
-    <div className="flex flex-col items-center p-6 h-screen background text-white">
+    <div className="flex flex-col items-center p-6 h-screen background text-neutral-100">
       {user && showAnimation ? (
         <>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-3xl font-bold"
-          >
-            Hello {user.name}
-          </motion.h1>
           <motion.img
             src={user.profilePicture}
             alt="Profile"
             initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
+            animate={{ opacity: 1, scale: 1, y: 10 }}
             transition={{ duration: 0.8 }}
-            className="w-24 h-24 rounded-full mt-4"
+            className="w-24 h-24 rounded-full"
           />
-          <motion.p
-            initial={{ opacity: 0 }}
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-6xl font-bold py-10"
+          >
+            Hello {user.name}
+          </motion.h1>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.5 }}
-            className="mt-4 text-lg"
+            className="font-bold text-4xl mb-5 text-gray-300"
           >
             Welcome to Trackify!
             <br />
-          </motion.p>
+          </motion.h2>
           <motion.div
             className="mt-10 flex flex-col justify-center"
             initial={{ opacity: 0 }}
@@ -70,46 +110,60 @@ function Home() {
             transition={{ duration: 1.5, delay: 1 }}
           >
             <button className="btn" onClick={() => navigate("/top-tracks")}>
-              Get Top Tracks
+              Your Tracks Wrapped
             </button>
+            {/* <button className="btn">
+              {timeSpent}
+            </button> */}
             <button className="btn" onClick={handleLogout}>
-                Logout
+              Logout
             </button>
+            
           </motion.div>
+
+          <motion.footer
+            className="absolute bottom-8 font-bold text-gray-300 text-md"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5, delay: 1.5 }}
+          >
+            @ 2025 Developed by Janice. All rights reserved.
+          </motion.footer>
         </>
-      ) : (
+      ) : user ? (
         <>
-          {user ? (
-            <div className="flex flex-col items-center justify-center mb-10">
-              <img
-                src={user.profilePicture}
-                alt="Profile"
-                className="w-24 h-24 rounded-full"
-              />
-              <h1 className="font-bold text-6xl py-5">Hello {user.name}</h1>
-            </div>
-          ) : (
-            <p>Loading user info... </p>
-          )}
-          <h2 className="font-bold text-4xl mb-10 text-gray-300">
-            Welcome to Trackify!
+          <img
+            src={user.profilePicture}
+            alt="Profile"
+            className="w-24 h-24 rounded-full"
+          />
+          <h1 className="font-bold text-6xl py-10">Hello {user.name}</h1>
+
+          {/* <p>Loading user info... </p> */}
+
+          <h2 className="font-bold text-4xl mb-5 text-gray-300">
+            This is Trackify!
           </h2>
 
           {/*  */}
           {/* Total time spent today*/}
+          <p></p>
 
           {/* New song listen to recently */}
 
           {/* People download playlist, if no then different topic */}
 
           <button onClick={() => navigate("/top-tracks")} className="btn">
-            Get Top Tracks
+            Your Tracks Wrapped
           </button>
-            <button className="btn" onClick={ handleLogout }>
-                Logout
-            </button>
+          <button className="btn" onClick={handleLogout}>
+            Logout
+          </button>
+          <footer className="absolute bottom-8 font-bold text-gray-300 text-md">
+            @ 2025 Developed by Janice. All rights reserved.
+          </footer>
         </>
-      )}
+      ) : null}
     </div>
   );
 }

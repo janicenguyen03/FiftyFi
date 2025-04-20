@@ -19,13 +19,13 @@ export const getTopItems = async (token, type, timeRange) => {
 
 export const getRecentlyPlayed = async (token) => {
     const limit = 50;
-    const maxItems = 200;
+    const lastDay = Date.now() - 24 * 60 * 60 * 1000;
 
     let allTracks = [];
     let nextBefore = Date.now();
 
     try {
-        while (allTracks.length <= maxItems) {
+        while (true) {
             // console.log(`Fetched so far: ${allTracks.length}`);
             const url = `${API_BASE_URL}/player/recently-played?limit=${limit}&before=${nextBefore}`;
             const response = await axios.get(url, {
@@ -36,9 +36,17 @@ export const getRecentlyPlayed = async (token) => {
 
             if (response.data.items.length === 0) break;
             
-            allTracks = [...allTracks, ...response.data.items];
+            const recentTracks = response.data.items.filter(item => {
+                const playedAt = new Date(item.played_at).getTime();
+                return playedAt >= lastDay;
+            });
+
+            allTracks = [...allTracks, ...recentTracks];
+
             let lastTrack = response.data.items[0];
             nextBefore = new Date(lastTrack.played_at).getTime();
+
+            if (nextBefore < lastDay) break;
             
             // Debug
             // console.log(`Last track: ${lastTrack.track.name} by ${lastTrack.track.artists[0].name}`);

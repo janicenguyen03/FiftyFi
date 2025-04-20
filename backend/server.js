@@ -3,11 +3,10 @@ import express from "express";
 import session from "express-session";
 import env from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
+import homeRoutes from "./routes/homeRoutes.js";
 import trackRoutes from "./routes/trackRoutes.js";
 
 const app = express();
-const AUTH_URL = "https://accounts.spotify.com/authorize";
-const TOKEN_URL = "https://accounts.spotify.com/api/token";
 
 app.use(cors({
   origin: "http://localhost:3000",
@@ -27,10 +26,6 @@ app.use(session({
   cookie: { secure: false, httpOnly: true }
 }));
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI;
-
 const PORT = process.env.PORT || 5000;
 
 app.get("/api/test", (req, res) => {
@@ -41,10 +36,9 @@ app.get("/api/check-session", (req,res) => {
   res.json({session: req.session});
 });
 
-
 app.use('/', authRoutes);
+app.use('/api/home', homeRoutes);
 app.use('/api/tracks', trackRoutes);
-
 
 app.listen(PORT, () => {
   console.log(`Backend is running on port ${PORT}`);

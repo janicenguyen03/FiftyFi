@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function TopTracks() {
+    const navigate = useNavigate();
     const [timeRange, setTimeRange ] = useState("short_term");
     const [topTracks, setTopTracks] = useState([]);
     const [mostRepeatedTrack, setMostRepeatedTrack] = useState([]);
@@ -45,6 +47,10 @@ function TopTracks() {
         <div className="background text-white">
             <h1>Top Tracks</h1>
 
+            <button className="btn" onClick={() => {
+                navigate("/home")}}>
+                Back 
+            </button>
             {/* Top tracks list */}
             <h2>Top Tracks</h2>
             <select onChange={(e) => {

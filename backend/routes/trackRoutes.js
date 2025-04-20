@@ -1,5 +1,5 @@
 import express from 'express';
-import { getTopTracks, getMostRepeatedTracks, getMostSkippedTracks } from '../trackController.js';
+import { getTopTracks, getMostRepeatedTracks, getMostSkippedTracks } from '../controllers/trackController.js';
 import isAuthenticated from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
