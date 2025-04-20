@@ -26,21 +26,6 @@ function Home() {
       });
   }, [navigate]);
 
-  // Get time spent on Spotify
-  useEffect(() => {
-    fetch("http://localhost:5000/api/home/time-spent", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setTimeSpent(data || 0);
-        console.log(data);
-      })
-      .catch((err) =>
-        console.error("Error fetching most repeated tracks:", err)
-      );
-  }, []);
-
   // Get last track played
   useEffect(() => {
     fetch("http://localhost:5000/api/home/latest-track", {
@@ -49,7 +34,20 @@ function Home() {
       .then((response) => response.json())
       .then((data) => {
         setLastTrack(data || {});
-        console.log(data);
+      })
+      .catch((err) =>
+        console.error("Error fetching most repeated tracks:", err)
+      );
+  }, []);
+
+  // Get time spent on Spotify
+  useEffect(() => {
+    fetch("http://localhost:5000/api/home/time-spent", {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setTimeSpent(data.partOfDayPercentage || 0);
       })
       .catch((err) =>
         console.error("Error fetching most repeated tracks:", err)
@@ -146,7 +144,7 @@ function Home() {
           </h2>
 
           {/*  */}
-          {/* Total time spent today*/}
+          {/* Total time spent in last 24 hours*/}
           <p></p>
 
           {/* New song listen to recently */}

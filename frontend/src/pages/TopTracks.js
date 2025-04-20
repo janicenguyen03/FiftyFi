@@ -7,6 +7,7 @@ function TopTracks() {
     const [topTracks, setTopTracks] = useState([]);
     const [mostRepeatedTrack, setMostRepeatedTrack] = useState([]);
     const [mostSkippedTrack, setMostSkippedTrack] = useState([]);
+    const [loveHateTrack, setLoveHateTrack] = useState([]);
 
     // Top Tracks
 
@@ -20,28 +21,55 @@ function TopTracks() {
         .catch(err => console.error('Error fetching top tracks:', err));
     }, [timeRange]);
 
+    // useEffect(() => {
+    //     fetch("http://localhost:5000/api/tracks/most-repeated", {
+    //         credentials: "include"
+    //     })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //         setMostRepeatedTrack(data || {})
+    //     })
+    //     .catch(err => console.error('Error fetching most repeated tracks:', err));
+    // }, []);
+    
+    // useEffect(() => {
+    //     fetch("http://localhost:5000/api/tracks/most-skipped", {
+    //         credentials: "include"
+    //     })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //         setMostSkippedTrack(data || {});
+    //     })
+    //     .catch(err => console.error('Error fetching most skipped tracks:', err));
+    // }, []);
+
+    // useEffect(() => {
+    //     fetch("http://localhost:5000/api/tracks/most-controversial", {
+    //         credentials: "include"
+    //     })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //         setLoveHateTrack(data || []);
+    //     })
+    //     .catch(err => console.error('Error fetching most skipped tracks:', err));
+    // }, []);
+
     useEffect(() => {
-        fetch("http://localhost:5000/api/tracks/most-repeated", {
+        fetch("http://localhost:5000/api/tracks/insights", {
             credentials: "include"
         })
         .then((response) => response.json())
         .then((data) => {
-            setMostRepeatedTrack(data || {})
+
+            setMostRepeatedTrack(data.mostRepeatedTrack || {})
+            setMostSkippedTrack(data.mostSkippedTrack || {});
+            setLoveHateTrack(data.loveHateTrack || {});
+            console.log(data.mostRepeatedTrack);
+            console.log(data.mostSkippedTrack);
+            console.log(data.loveHateTrack);
         })
         .catch(err => console.error('Error fetching most repeated tracks:', err));
-    }, []);
-    
-    useEffect(() => {
-        fetch("http://localhost:5000/api/tracks/most-skipped", {
-            credentials: "include"
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            setMostSkippedTrack(data || {});
-            console.log(data);
-        })
-        .catch(err => console.error('Error fetching most skipped tracks:', err));
-    }, []);
+    }, [])
 
     return (
         <div className="background text-white">
@@ -89,6 +117,14 @@ function TopTracks() {
                     <h2>Most Skipped Track</h2>
                     <p>{mostSkippedTrack.name} - {mostSkippedTrack.artist}</p>
                     <p>Count: {mostSkippedTrack.count}</p>
+                </div>
+            )}
+
+            {/* love hate song */}
+            { loveHateTrack.name && (
+                <div>
+                    <h2>Love Hate Track</h2>
+                    <p>{loveHateTrack.name} - {loveHateTrack.artist}</p>
                 </div>
             )}
 

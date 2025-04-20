@@ -15,8 +15,9 @@ export const getTimeSpent = async (req, res) => {
     const partOfDay = totalMs / (24 * 60 * 60 * 1000);
     const partOfDayPercentage = Math.round(partOfDay * 100);
 
-    console.log(partOfDayPercentage);
-    return partOfDayPercentage;
+    return res.json({
+      partOfDayPercentage: partOfDayPercentage,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -37,13 +38,14 @@ export const getLatestTrack = async (req, res) => {
       name: latestTrack.track.name,
       id: latestTrack.track.id,
       name: latestTrack.track.name,
-      artists: latestTrack.track.artists.map((artist) => artist.name).join(", "),
+      artists: latestTrack.track.artists
+        .map((artist) => artist.name)
+        .join(", "),
       album: latestTrack.track.album.name,
       image: latestTrack.track.album.images[0]?.url,
       spotifyUrl: latestTrack.track.external_urls.spotify,
       duration: latestTrack.track.duration_ms,
     });
-
   } catch (error) {
     console.error("Error fetching recently played tracks:", error.message);
     throw error;
