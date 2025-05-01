@@ -9,16 +9,40 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        "custom-mesh": `
-          radial-gradient(at 16% 0%, rgb(226, 232, 240) 0, transparent 36%),
-          radial-gradient(at 71% 100%, rgb(134, 239, 172) 0, transparent 40%),
-          radial-gradient(at 100% 0%, rgb(224, 231, 255) 0, transparent 24%),
-          radial-gradient(at 60% 77%, rgb(21, 128, 61) 0, transparent 45%),
-          radial-gradient(at 0% 100%, rgb(245, 245, 244) 0, transparent 29%);
-  `,
+        "custom-mesh-dark": 
+        `radial-gradient(at 0% 100%, rgb(21, 128, 61) 0, transparent 46%),
+        radial-gradient(at 0% 100%, rgb(52, 211, 153) 0, transparent 57%),
+        radial-gradient(at 0% 100%, rgb(232, 121, 249) 0, transparent 40%),
+        radial-gradient(at 100% 0%, rgb(21, 128, 61) 0, transparent 48%),
+        radial-gradient(at 100% 0%, rgb(232, 121, 249) 0, transparent 42%),
+        radial-gradient(at 100% 0%, rgb(52, 211, 153) 0, transparent 56%);
+        `,
       },
       colors: {
-        "green-base": "rgb(22, 163, 74)",
+        "dark-base": "rgb(23, 23, 23)"
+      },
+      animation: {
+        'mesh': 'animateMesh 20s infinite',
+      },
+      keyframes: {
+        animateMesh: {
+          '0%': {
+            backgroundPosition: '0% 0%',
+          },
+          '25%': {
+            backgroundPosition: '50% 5%',
+          },
+          '50%': {
+            backgroundPosition: '100% 10%',
+          },
+          '75%': {
+            backgroundPosition: '50% 5%',
+          },
+          '100%': {
+            backgroundPosition: '0% 0%',
+          },
+
+        },
       },
     },
   },

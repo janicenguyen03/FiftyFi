@@ -20,7 +20,7 @@ function Home() {
 
   useEffect(() => {
     if (step === 1) {
-      pass
+      return;
     };
   }, []);
 
