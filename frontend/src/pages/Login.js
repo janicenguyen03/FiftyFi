@@ -3,7 +3,7 @@ import React from "react";
 function Login() {
   return (
     <div className="flex flex-col h-screen w-full items-center justify-center login-background text-gray-100">
-      <h1 className="text-5xl font-bold mb-6">Trackify</h1>
+      <h1 className="text-5xl font-bold mb-6">DailyPocket</h1>
       <a href="http://localhost:5000/login">
         <button className="btn text-xl">
           Login with Spotify

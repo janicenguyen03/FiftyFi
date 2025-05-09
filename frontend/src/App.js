@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Library from "./pages/Library";
 import TopTracks from "./pages/TopTracks";
+import PackOne from "./pages/PackOne";
 
 function App() {
   return (
@@ -9,10 +11,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/library" element={<Library />} />
         <Route path="/top-tracks" element={<TopTracks />} />
-        {/* <Route path="/top-artists" element={<TopArtists />} /> */}
-        {/* <Route path="/top-genres" element={<TopGenres />} /> */}
-        {/* <Route path="/recommendations" element={<Recommendations />} /> */}
+        <Route path="/pack-one" element={<PackOne />} />
       </Routes>
     </Router>
   );

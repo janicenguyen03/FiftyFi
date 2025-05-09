@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 function Home() {
+  const BACKEND_URL = "http://localhost:5000";
+
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [user, setUser] = useState(null);
 
   const [showAnimation, setShowAnimation] = useState(false);
 
-  const [timePercentage, setTimePercentage] = useState(0);
-  const [timeSpent, setTimeSpent] = useState({});
   const [lastTrack, setLastTrack] = useState({});
   const [playlistFollowers, setPlaylistFollowers] = useState(0);
 
@@ -27,7 +27,7 @@ function Home() {
   // Get user profile info
   useEffect(() => {
     axios
-      .get("http://localhost:5000/me", { withCredentials: true })
+      .get(BACKEND_URL + "/me", { withCredentials: true })
       .then((response) => {
         setUser(response.data);
         setLoading(false);
@@ -39,40 +39,24 @@ function Home() {
   }, [navigate]);
 
 
-  // Get last track played
-  useEffect(() => {
-    fetch("http://localhost:5000/api/home/latest-track", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setLastTrack(data || {});
-      })
-      .catch((err) =>
-        console.error("Error fetching most repeated tracks:", err)
-      );
-  }, []);
-
-
-  // Get time spent on Spotify
-  useEffect(() => {
-    fetch("http://localhost:5000/api/home/time-spent", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setTimePercentage(data.partOfDayPercentage || 0);
-        setTimeSpent(data.totalTime || {});
-      })
-      .catch((err) =>
-        console.error("Error fetching most repeated tracks:", err)
-      );
-  }, []);
+  // // Get last track played
+  // useEffect(() => {
+  //   fetch(BACKEND_URL + "/api/home/latest-track", {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setLastTrack(data || {});
+  //     })
+  //     .catch((err) =>
+  //       console.error("Error fetching most repeated tracks:", err)
+  //     );
+  // }, []);
 
 
   // Get playlist followers
   useEffect(() => {
-    fetch("http://localhost:5000/api/home/playlist-saved-count", {
+    fetch(BACKEND_URL + "/api/home/playlist-saved-count", {
       credentials: "include",
     })
       .then((response) => response.json())
@@ -97,7 +81,7 @@ function Home() {
 
   const handleLogout = () => {
     localStorage.removeItem("visitedHome");
-    window.location.href = "http://localhost:5000/logout";
+    window.location.href = BACKEND_URL + "/logout";
   };
 
 
@@ -107,7 +91,7 @@ function Home() {
 
   return (
     <div className="flex flex-col items-center p-6 h-screen background text-neutral-100">
-      {user && showAnimation ? (
+      {showAnimation ? (
         <>
           <motion.img
             src={user.profilePicture}
@@ -132,7 +116,7 @@ function Home() {
             transition={{ duration: 1.2, delay: 0.5 }}
             className="font-bold text-4xl mb-5 text-gray-300"
           >
-            Welcome to Trackify!
+            Welcome to DailyPocket!
             <br />
           </motion.h2>
           <motion.div
@@ -142,11 +126,11 @@ function Home() {
             transition={{ duration: 1.5, delay: 1 }}
           >
             <button className="btn" onClick={() => navigate("/top-tracks")}>
-              Your Tracks Wrapped
+              Top Tracks
             </button>
-            {/* <button className="btn">
-              {timeSpent}
-            </button> */}
+            <button className="btn" onClick={() => navigate("/pack-one")}>
+              Time Track
+            </button>
             <button className="btn" onClick={handleLogout}>
               Logout
             </button>
@@ -162,7 +146,7 @@ function Home() {
             @ 2025 Developed by Janice. All rights reserved.
           </motion.footer>
         </>
-      ) : user ? (
+      ) : (
         <>
           <img
             src={user.profilePicture}
@@ -174,18 +158,16 @@ function Home() {
           {/* <p>Loading user info... </p> */}
 
           <h2 className="font-bold text-4xl mb-5 text-gray-300">
-            This is Trackify!
+            This is DailyPocket!
           </h2>
-
-          {/*  */}
-          {/* Total time spent in last 24 hours*/}
-
-          {/* New song listen to recently */}
 
           {/* People download playlist, if no then different topic */}
 
           <button onClick={() => navigate("/top-tracks")} className="btn">
             Your Tracks Wrapped
+          </button>
+          <button onClick={() => navigate("/pack-one")} className="btn">
+            Your Time Wrapped
           </button>
           <button className="btn" onClick={handleLogout}>
             Logout
@@ -194,7 +176,7 @@ function Home() {
             @ 2025 Developed by Janice. All rights reserved.
           </footer>
         </>
-      ) : null}
+      )}
     </div>
   );
 }

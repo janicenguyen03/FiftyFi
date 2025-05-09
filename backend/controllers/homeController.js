@@ -1,36 +1,6 @@
 import axios from "axios";
-import { getRecentlyPlayed } from "../spotifyService.js";
 
 const API_BASE_URL = "https://api.spotify.com/v1";
-
-export const getTimeSpent = async (req, res) => {
-  try {
-    const token = req.session.access_token;
-    const recentlyPlayed = await getRecentlyPlayed(token);
-
-    const totalMs = recentlyPlayed.reduce((acc, currTrack) => {
-      return acc + currTrack.track.duration_ms;
-    }, 0);
-
-    const partOfDay = totalMs / (24 * 60 * 60 * 1000);
-    const partOfDayPercentage = Math.round(partOfDay * 100);
-    const hours = Math.floor(ms / (1000 * 60 * 60));
-    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((ms % (1000 * 60)) / 1000);
-
-    return res.json({
-      partOfDayPercentage: partOfDayPercentage,
-      totalTime: {
-        ms: totalMs,
-        hours: hours,
-        minutes: minutes,
-        seconds: seconds,
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
 
 export const getLatestTrack = async (req, res) => {
   try {

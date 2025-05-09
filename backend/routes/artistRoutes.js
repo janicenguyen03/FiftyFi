@@ -6,7 +6,4 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
-router.get('/latest-track', getLatestTrack);
-router.get('/playlist-saved-count', getPlaylistFollowers);
-
 export default router;
