@@ -5,7 +5,7 @@ import env from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import homeRoutes from "./routes/homeRoutes.js";
 import trackRoutes from "./routes/trackRoutes.js";
-// import artistRoutes from "./routes/artistRoutes.js";
+import artistRoutes from "./routes/artistRoutes.js";
 import timeRoutes from "./routes/timeRoutes.js";
 
 const app = express();
@@ -42,6 +42,7 @@ app.use('/', authRoutes);
 app.use('/api/home', homeRoutes);
 app.use('/api/tracks', trackRoutes);
 app.use('/api/time-spent', timeRoutes);
+app.use('/api/artist', artistRoutes);
 
 app.listen(PORT, () => {
   console.log(`Backend is running on port ${PORT}`);
@@ -50,8 +51,6 @@ app.listen(PORT, () => {
 {/* Top 6 songs
   Top 6 artists
   Tracks:
-    most repeated, skipped, lovehate
-    most mainstream, underrated
     trend setter/ hidden gem seeker
     recommend 1 song
   Artists:
@@ -61,11 +60,6 @@ app.listen(PORT, () => {
     most likely to belong to
     recommend 1 artist
   Time:
-    time spent last 24 hours
-    time spent morning
-    time spent afternoon
     time period with most activity
-    top song in morning
     rec song in morning
-    top song at night
     rec song at night */}

@@ -25,29 +25,19 @@ function PackOne() {
         })
         .then((response) => response.json())
         .then((data) => {
-            setPartOfDayBefore(data.before12PM.partOfDayPercentage);
-            console.log("1");
-            setPartOfDayAfter(data.after12PM.partOfDayPercentage);
-            console.log("2");
-            setPartOfDay(data.allTracks.partOfDayPercentage);
-            console.log("3");
+            setPartOfDayBefore(data.before12PM.partOfDayPercentage || 0);
+            setPartOfDayAfter(data.after12PM.partOfDayPercentage || 0);
+            setPartOfDay(data.allTracks.partOfDayPercentage || 0);
 
-            setTotalTimeBefore(data.before12PM.totalTime);
-            console.log("4");
-            setTotalTimeAfter(data.after12PM.totalTime);
-            console.log("5");
-            setTotalTime(data.allTracks.totalTime);
-            console.log("6");
+            setTotalTimeBefore(data.before12PM.totalTime || {});
+            setTotalTimeAfter(data.after12PM.totalTime || {});
+            setTotalTime(data.allTracks.totalTime || {});
 
-            setMostRepeatedBefore(data.before12PM.mostRepeatedTrack);
-            console.log("7");
-            setMostRepeatedAfter(data.after12PM.mostRepeatedTrack);
-            console.log("8");
+            setMostRepeatedBefore(data.before12PM.mostRepeatedTrack || {});
+            setMostRepeatedAfter(data.after12PM.mostRepeatedTrack || {});
 
-            setMostSkippedBefore(data.before12PM.mostSkippedTrack);
-            console.log("9");
-            setMostSkippedAfter(data.after12PM.mostSkippedTrack);
-            console.log("10");
+            setMostSkippedBefore(data.before12PM.mostSkippedTrack || {});
+            setMostSkippedAfter(data.after12PM.mostSkippedTrack || {});
         })
         .catch(err => console.error('Error fetching time insights:', err));
     }, []);
@@ -81,14 +71,14 @@ function PackOne() {
                 <div>
                     <p>You have listened to Spotify for 
                         a total of {totalTimeBefore.hours} hours {totalTimeBefore.minutes} minutes 
-                        and {totalTimeBefore.second} seconds before 12PM</p>
+                        and {totalTimeBefore.second} seconds before 5PM</p>
                 </div>    
             )}
             { totalTimeAfter && (
                 <div>
                     <p>You have listened to Spotify for 
                         a total of {totalTimeAfter.hours} hours {totalTimeAfter.minutes} minutes 
-                        and {totalTimeAfter.second} seconds after 12PM</p>
+                        and {totalTimeAfter.second} seconds after 5PM</p>
                 </div>    
             )}
             { totalTime && (
@@ -98,33 +88,33 @@ function PackOne() {
                         and {totalTime.second} seconds in total</p>
                 </div>    
             )}
-            { mostRepeatedBefore && (
+            { mostRepeatedBefore && mostRepeatedBefore.name && (
                 <div>
-                    <h2>Most Repeated Track Before 12PM</h2>
+                    <h2>Most Repeated Track Before 5PM</h2>
                     <p>{mostRepeatedBefore.name}</p>
                     <p>{mostRepeatedBefore.artists}</p>
                     <a href={mostRepeatedBefore.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>    
             )}
-            { mostRepeatedAfter && (
+            { mostRepeatedAfter && mostRepeatedAfter.name && (
                 <div>
-                    <h2>Most Repeated Track After 12PM</h2>
+                    <h2>Most Repeated Track After 5PM</h2>
                     <p>{mostRepeatedAfter.name}</p>
                     <p>{mostRepeatedAfter.artists}</p>
                     <a href={mostRepeatedAfter.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>    
             )}
-            { mostSkippedBefore && (
+            { mostSkippedBefore && mostSkippedBefore.name && (
                 <div>
-                    <h2>Most Skipped Track Before 12PM</h2>
+                    <h2>Most Skipped Track Before 5PM</h2>
                     <p>{mostSkippedBefore.name}</p>
                     <p>{mostSkippedBefore.artists}</p>
                     <a href={mostSkippedBefore.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>    
             )}
-            { mostSkippedAfter && (
+            { mostSkippedAfter && mostSkippedAfter.name &&  (
                 <div>
-                    <h2>Most Skipped Track After 12PM</h2>
+                    <h2>Most Skipped Track After 5PM</h2>
                     <p>{mostSkippedAfter.name}</p>
                     <p>{mostSkippedAfter.artists}</p>
                     <a href={mostSkippedAfter.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>

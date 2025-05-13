@@ -7,39 +7,26 @@ let allTracks = [];
 
 function totalTimeListened(recentlyPlayed) {
     let totalTime = 0;
-    // console.log("1st track played at:", new Date(recentlyPlayed[0].track.played_at).toISOString());
     const n = recentlyPlayed.length;
-    for (let i = 0; i < recentlyPlayed.length - 1; i++) {
+
+    for (let i = 0; i < n; i++) {
         const current = recentlyPlayed[i];
         const previous = recentlyPlayed[i + 1];
+
+        if (i === n - 1) {
+            totalTime += current.track.duration_ms;
+            break;
+        }
         let timeAdded = 0;
 
         const playDuration = new Date(current.played_at) - new Date(previous.played_at);
         const actualDuration = current.track.duration_ms;
 
-        if (playDuration > actualDuration) {
-            timeAdded = actualDuration;
-        } else if (playDuration > 0) {
-            timeAdded = playDuration;
-        }
-        totalTime = totalTime + timeAdded;
-        if (i <= 5) {
-            console.log("1st track played at:", new Date(current.played_at).toISOString());
-            console.log("2nd track played at:", new Date(previous.played_at).toISOString());
-            console.log("Play duration:", playDuration);
-            console.log("Actual duration:", actualDuration);
-            console.log("Time added:", timeAdded);
-        }
-
-        if (i >= n -3) {
-            console.log("Last track played at:", new Date(current.played_at).toISOString());
-            console.log("2nd last track played at:", new Date(previous.played_at).toISOString());
-            console.log("Play duration:", playDuration);
-            console.log("Actual duration:", actualDuration);
-            console.log("Time added:", timeAdded);
-        }
+        timeAdded = playDuration > actualDuration ? actualDuration : playDuration;
+        totalTime += timeAdded;
     }
-    console.log("----------------------Total time listened:", totalTime);
+    console.log("Total time listened:", totalTime);
+
     return totalTime;
 }
 
@@ -66,7 +53,7 @@ const getTrackID = (item) => item.track.id;
 export async function getTimeInsights(req, res) {
     try {
         const token = req.session.access_token;
-        const recentlyPlayed = await getRecentlyPlayed(token);
+        const recentlyPlayed = await getRecentlyPlayed(req, token);
 
         before12PM = recentlyPlayed.before12PM || [];
         after12PM = recentlyPlayed.after12PM || [];
@@ -78,17 +65,6 @@ export async function getTimeInsights(req, res) {
         const totalMsAfter12PM = totalTimeListened(after12PM);
         console.log("All tracks:");
         const totalMs = totalTimeListened(allTracks);
-        // const totalMsBefore12PM = before12PM.reduce((acc, currTrack) => {
-        //     return acc + currTrack.track.duration_ms;
-        // }, 0);
-        // const totalMsAfter12PM = after12PM.reduce((acc, currTrack) => {
-        //     return acc + currTrack.track.duration_ms;
-        // }, 0);
-        // const totalMs = allTracks.reduce((acc, currTrack) => {
-        //     return acc + currTrack.track.duration_ms;
-        // }, 0);
-
-        console.log(totalMsBefore12PM, totalMsAfter12PM, totalMs);
 
         const { partOfDayPercentage: partOfDayPercentageBefore, 
             totalTime: totalTimeBefore } = countTime(totalMsBefore12PM, 12);

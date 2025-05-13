@@ -8,7 +8,6 @@ function Home() {
   const BACKEND_URL = "http://localhost:5000";
 
   const navigate = useNavigate();
-  const [step, setStep] = useState(0);
   const [user, setUser] = useState(null);
 
   const [showAnimation, setShowAnimation] = useState(false);
@@ -17,12 +16,6 @@ function Home() {
   const [playlistFollowers, setPlaylistFollowers] = useState(0);
 
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (step === 1) {
-      return;
-    };
-  }, []);
 
   // Get user profile info
   useEffect(() => {
@@ -39,19 +32,20 @@ function Home() {
   }, [navigate]);
 
 
-  // // Get last track played
-  // useEffect(() => {
-  //   fetch(BACKEND_URL + "/api/home/latest-track", {
-  //     credentials: "include",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setLastTrack(data || {});
-  //     })
-  //     .catch((err) =>
-  //       console.error("Error fetching most repeated tracks:", err)
-  //     );
-  // }, []);
+  // Get last track played
+  useEffect(() => {
+    fetch(BACKEND_URL + "/api/home/latest-track", {
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setLastTrack(data || {});
+        console.log("Last track played:", data);
+      })
+      .catch((err) =>
+        console.error("Error fetching most repeated tracks:", err)
+      );
+  }, []);
 
 
   // Get playlist followers
@@ -62,6 +56,7 @@ function Home() {
       .then((response) => response.json())
       .then((data) => {
         setPlaylistFollowers(data || 0);
+        console.log("Playlist followers:", data);
       })
       .catch((err) =>
         console.error("Error fetching most repeated tracks:", err)
@@ -131,6 +126,9 @@ function Home() {
             <button className="btn" onClick={() => navigate("/pack-one")}>
               Time Track
             </button>
+            <button className="btn" onClick={() => navigate("/pack-two")}>
+              Artist Track
+            </button>
             <button className="btn" onClick={handleLogout}>
               Logout
             </button>
@@ -168,6 +166,9 @@ function Home() {
           </button>
           <button onClick={() => navigate("/pack-one")} className="btn">
             Your Time Wrapped
+          </button>
+          <button onClick={() => navigate("/pack-two")} className="btn">
+            Your Artist Wrapped
           </button>
           <button className="btn" onClick={handleLogout}>
             Logout

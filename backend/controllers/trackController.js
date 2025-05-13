@@ -1,7 +1,7 @@
 import { getLoveHateTrack, getRepeatedSkipped, getMostRepeatedOrSkipped, getMainstreamUnderrated } from "../middlewares/trackUtils.js";
 import { getTopItems, getRecentlyPlayed } from "../middlewares/spotifyService.js";
 
-export const getTopTracks = async (req, res) => {
+export async function getTopTracks(req, res) {
     
     const token = req.session.access_token;
 
@@ -34,7 +34,7 @@ export const getTopTracks = async (req, res) => {
 
 const getTrackID = (item) => item.track.id;
   
-export const getTrackInsights = async (req, res) => {
+export async function getTrackInsights(req, res) {
     const token = req.session.access_token;
 
     if (!token) {
@@ -42,7 +42,7 @@ export const getTrackInsights = async (req, res) => {
     }
 
     try {
-        const recentlyPlayed = await getRecentlyPlayed(token);
+        const recentlyPlayed = await getRecentlyPlayed(req, token);
         const allTracks = recentlyPlayed.allTracks;
 
         const {repeatedTracks, skippedTracks} = getRepeatedSkipped(allTracks, getTrackID);

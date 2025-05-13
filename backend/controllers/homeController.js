@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL = "https://api.spotify.com/v1";
 
-export const getLatestTrack = async (req, res) => {
+export async function getLatestTrack(req, res) {
   try {
     const token = req.session.access_token;
     const url = `${API_BASE_URL}/me/player/recently-played?limit=1;`;
@@ -31,7 +31,7 @@ export const getLatestTrack = async (req, res) => {
   }
 };
 
-export const getPlaylistFollowers = async (req, res) => {
+export async function getPlaylistFollowers(req, res) {
   const token = req.session.access_token;
 
   if (!token) {
@@ -56,7 +56,7 @@ export const getPlaylistFollowers = async (req, res) => {
       }
     }
 
-    return res.json({ followers });
+    return followers;
   } catch (error) {
     console.error("Error fetching playlist followers:", error.message);
     res.status(500).json({ error: error.message });

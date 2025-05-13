@@ -1,6 +1,14 @@
-import { getTopItems, getRecentlyPlayed } from "../middlewares/spotifyService.js";
+import { getMainstreamUnderrated, getRepeatedSkipped, getMostRepeatedOrSkipped, getLoveHateArtist, getMostFeaturedArtistID } from "../middlewares/artistUtils.js";
+import { getTopItems, getRecentlyPlayed, getArtistInfo } from "../middlewares/spotifyService.js";
 
-export const getTopArtists = async (req, res) => {
+//  Artists:
+// most repeated, skipped, lovehate
+// most featured
+// most mainstream, underrated
+// most likely to belong to
+// recommend 1 artist
+
+export async function getTopArtists(req, res) {
     
     const token = req.session.access_token;
 
@@ -9,49 +17,44 @@ export const getTopArtists = async (req, res) => {
     }
 
     try {
-        const tracks = await getTopItems(token, 'artists');
-
-        if (!tracks || tracks.length === 0) {
+        const artists = await getTopItems(token, 'artists');
+        if (!artists || artists.length === 0) {
             return res.status(404).json({ error: "No tracks found" });
-        }  
-        const formattedTracks = tracks.map(track => ({
-            id: track.id,
-            name: track.name,
-            artists: track.artists.map(artist => artist.name).join(", "),
-            album: track.album.name,
-            image: track.album.images[0]?.url,
-            spotifyUrl: track.external_urls.spotify,
-            duration: track.duration_ms,
+        };
+
+        const formattedArtists = artists.map(item => ({
+            id: item.id,
+            name: item.name,
+            image: item.images[0]?.url,
+            spotifyUrl: item.external_urls.spotify,
+            genres: item.genres
         }));
 
-
-        res.json({ topTracks: formattedTracks });
+        res.json({ topArtists: formattedArtists });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-function getLoveHateArtist(repeatedTracks, skippedTracks) {
-    const overlap = Object.keys(repeatedTracks).filter(trackId => trackId in skippedTracks);
-    return overlap.length > 0 ? overlap[0] : null;
-}
 
-function getArtistDetail(item, highestCount) {
-    if (item) {
-        return {
-            id: item.track.id,
-            name: item.track.name,
-            artists: item.track.artists.map(artist => artist.name).join(", "),
-            album: item.track.album.name,
-            image: item.track.album.images[0]?.url,
-            spotifyUrl: item.track.external_urls.spotify,
-            duration: item.track.duration_ms,
-            count: highestCount
-        };
-    }};
+function getArtistIDList(tracks) {
+    return tracks.flatMap(track => {
+        if (track.track && track.track.artists && track.track.artists.length > 0) {
+            return track.track.artists.map(artist => artist.id);
+        }
+        return [];
+    }).filter(id => id !== null);
+};
 
 
-export const getArtistInsights = async (req, res) => {
+function getArtistID(item) {
+    if (item && item.track && item.track.artists && item.track.artists.length > 0) {
+        return item.track.artists[0].id;
+    }
+    return null;
+};
+
+export async function getArtistInsights(req, res) {
     const token = req.session.access_token;
 
     if (!token) {
@@ -59,73 +62,40 @@ export const getArtistInsights = async (req, res) => {
     }
 
     try {
-        const recentlyPlayed = await getRecentlyPlayed(token);
+        const recentlyPlayed = await getRecentlyPlayed(req, token);
+        const allTracks = recentlyPlayed.allTracks;
+        const allArtistsID = getArtistIDList(allTracks);
+        const allArtists = await getArtistInfo(token, allArtistsID);
 
-        let repeatedTracks = {};
-        let skippedTracks = {};
+        const {repeatedArtists, skippedArtists} = getRepeatedSkipped(allTracks, getArtistID);
+        const mostRepeatedArtist = getMostRepeatedOrSkipped(allArtists, repeatedArtists, 'repeated');
+        const mostSkippedArtist = getMostRepeatedOrSkipped(allArtists, skippedArtists, 'skipped');
 
-        for (let i=0; i < recentlyPlayed.length - 1; i++) {
-            let currentTrack = recentlyPlayed[i];
-            let previousTrack = recentlyPlayed[i + 1];
-            
-            let playDuration = new Date(currentTrack.played_at) - new Date(previousTrack.played_at);
-            let actualDuration = currentTrack.track.duration_ms;
-            
-            if (playDuration > 0 && playDuration > actualDuration * 0.75) {
-                let trackId = currentTrack.track.id;
-                repeatedTracks[trackId] = (repeatedTracks[trackId] || 0) + 1;
-            }
-
-            if (playDuration >= 0 && playDuration < actualDuration * 0.35) {
-                let trackId = currentTrack.track.id;
-                skippedTracks[trackId] = (skippedTracks[trackId] || 0) + 1;
-            }
+        const loveHateArtist = getLoveHateArtist(repeatedArtists, skippedArtists, allArtists);
+        const { mainstreamArtist, underratedArtist } = getMainstreamUnderrated(allArtists);
+        
+        const {mostFeaturedArtistID, count} = getMostFeaturedArtistID(allTracks);
+        let mostFeaturedArtist = allArtists.find(item => item.id === mostFeaturedArtistID);
+        mostFeaturedArtist = {
+            id: mostFeaturedArtistID,
+            name: mostFeaturedArtist?.name,
+            image: mostFeaturedArtist?.images[0]?.url,
+            spotifyUrl: mostFeaturedArtist?.external_urls.spotify,
+            genres: mostFeaturedArtist?.genres,
+            count,
+            type: "featured",
         }
-        
-        const mostRepeated = Object.entries(repeatedTracks).sort((a, b) => b[1] - a[1])[0];
-        const mostRepeatedTrack = recentlyPlayed.find(item => item.track.id === mostRepeated[0]);
-        const highestCount = mostRepeated[1];
-
-        const mostSkipped = Object.entries(skippedTracks).sort((a, b) => b[1] - a[1])[0];
-        const mostSkippedTrack = recentlyPlayed.find(item => item.track.id === mostSkipped[0]);
-        const highestSkip = mostSkipped[1];
-
-        let repeatedTrackDetail;
-        let skippedTrackDetail;
-        let loveHateTrackDetail;
-        
-        repeatedTrackDetail = skippedTrackDetail = loveHateTrackDetail = {
-            id: "", name: "", artists: "", album: "", image: "", spotifyUrl: "", duration: 0, count: 0
-        };
-
-        repeatedTrackDetail = getTrackDetail(mostRepeatedTrack, highestCount);            
-        skippedTrackDetail = getTrackDetail(mostSkippedTrack, highestSkip);
-
-        const loveHateTrackId = getLoveHateTracks(repeatedTracks, skippedTracks);
-        if (loveHateTrackId) {
-            const loveHateTrackItem = recentlyPlayed.find(item => item.track.id === loveHateTrackId);
-            if (loveHateTrackItem) {
-                loveHateTrackDetail = getTrackDetail(loveHateTrackItem, 0);
-        }}
-        console.log(repeatedTrackDetail.name);
-        console.log(skippedTrackDetail.name);
-        console.log(loveHateTrackDetail.name);
 
         res.json({ 
-            mostRepeatedTrack: repeatedTrackDetail,
-            mostSkippedTrack: skippedTrackDetail,
-            loveHateTrack: loveHateTrackDetail
+            mostRepeatedArtist: mostRepeatedArtist || {},
+            mostSkippedArtist: mostSkippedArtist || {},
+            loveHateArtist: loveHateArtist || {},
+            mainstreamArtist: mainstreamArtist || {},
+            underratedArtist: underratedArtist || {},
+            mostFeaturedArtist: mostFeaturedArtist || {},
         });
 
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
-
-// most feature artist
-
-// recommend an artist
-
-// most mainstream
-
-// most underrated
+};

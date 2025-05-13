@@ -1,40 +1,16 @@
 import axios from "axios";
 
 const API_BASE_URL = "https://api.spotify.com/v1";
-let cachedRecentPlayed = null;
-let lastFetchedDate = null;
-
-function getYesterdayTimeRange() {
-    const now = new Date();
-
-    const midnightTodayUTC = new Date(Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate()
-    ));
-
-    const midnightYesterdayUTC = new Date(midnightTodayUTC);
-    midnightYesterdayUTC.setUTCDate(midnightTodayUTC.getUTCDate() - 1);
-
-    const endOfYesterdayUTC = new Date(midnightTodayUTC.getTime() -1);
-    return {
-        start: midnightYesterdayUTC.getTime(),
-        end: endOfYesterdayUTC.getTime(),
-    };
-    
-}
 
 function splitTracksByTime(recentlyPlayed) {
-    const { start } = getYesterdayTimeRange();
-    const noonYesterday = start + 12 * 60 * 60 * 1000;
-
     const before12PM = [];
     const after12PM = [];
 
     recentlyPlayed.forEach((track) => {
-        const playedAt = new Date(track.played_at).getTime();
+        const playedAt = new Date(track.played_at);
+        const hours = playedAt.getHours();
 
-        if (playedAt < noonYesterday) {
+        if (hours >= 0 && hours < 12) {
             before12PM.push(track);
         } else {
             after12PM.push(track);
@@ -43,6 +19,71 @@ function splitTracksByTime(recentlyPlayed) {
 
     return { before12PM, after12PM };
 }
+
+function cleanRecentlyPlayed(recentlyPlayed) {
+    const sorted = recentlyPlayed.slice().sort((a, b) => new Date(b.played_at) - new Date(a.played_at));
+
+    let seen = new Set();
+    let repeated = 0;
+    const deduped = sorted.filter(item => {
+        const playedAt = item.played_at;
+        const trackId = item.track?.id;
+        if (!playedAt || !trackId) {
+            console.warn("Missing data for item", item);
+            return false;
+        }
+        const key = trackId + playedAt;
+        if (seen.has(key)) {
+            repeated++;
+            return false;
+        }
+        seen.add(key);
+        return true;
+    });
+
+    const cleaned = [];
+    for (let i = 0; i < deduped.length - 1; i++) {
+        const current = deduped[i];
+        const next = deduped[i + 1];
+        const duration = new Date(current.played_at) - new Date(next.played_at);
+        if (duration >= 0) {
+            cleaned.push(current);
+        }
+    }
+
+    if (deduped.length > 0) {
+        cleaned.push(deduped[deduped.length - 1]);
+    }
+
+    return cleaned;
+}
+
+export async function getArtistInfo(token, artistIds) {
+    const allArtists = [];
+    const chunkSize = 50;
+    const chunks = [];
+
+    for (let i = 0; i < artistIds.length; i += chunkSize) {
+        chunks.push(artistIds.slice(i, i + chunkSize));
+    }
+
+    for (const chunk of chunks) {
+        const idsParam = chunk.join(",");
+        const url = `${API_BASE_URL}/artists?ids=${idsParam}`;
+
+        try {
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            allArtists.push(...response.data.artists);
+        } catch (error) {
+            console.error("Failed to fetch artist chunk:", error.message);
+        }
+    }
+    return allArtists;
+};
 
 export async function getTopItems(token, type) {
     const url = `${API_BASE_URL}/me/top/${type}?limit=6&time_range=short_term`;
@@ -59,71 +100,47 @@ export async function getTopItems(token, type) {
     }
 };
 
-export async function getRecentlyPlayed(token) {
-    const todayUTC = new Date().toISOString().split("T")[0];
-    if (cachedRecentPlayed && lastFetchedDate === todayUTC) {
+export async function getRecentlyPlayed(req, token) {
+    const currentTime = new Date();
+
+    if (req.session.cachedRecentPlayed && req.session.lastFetchedTime && (currentTime - req.session.lastFetchedTime) < 60 * 60 * 1000) {
         console.log("Returning cached recently played tracks");
-        return cachedRecentPlayed;
+        return req.session.cachedRecentPlayed;
     }
     
     console.log("Fetching recently played tracks from Spotify API");
 
-    const { start, end } = getYesterdayTimeRange();
-
-    const limit = 50;
     let allTracks = [];
-    let nextBefore = end;
 
     try {
-        while (true) {
-            // console.log(`Fetched so far: ${allTracks.length}`);
-            const url = `${API_BASE_URL}/me/player/recently-played?limit=${limit}&before=${nextBefore}`;
-            const response = await axios.get(url, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+        const url = `${API_BASE_URL}/me/player/recently-played?limit=50`;
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        allTracks = response.data.items;        
+       
+        let { before12PM, after12PM } = splitTracksByTime(allTracks);
 
-            if (response.data.items.length === 0) break;
-            
-            const recentTracks = response.data.items.filter(item => {
-                const playedAt = new Date(item.played_at).getTime();
-                return playedAt >= start && playedAt <= end;
-            });
+        allTracks = cleanRecentlyPlayed(allTracks);
+        before12PM = cleanRecentlyPlayed(before12PM);
+        after12PM = cleanRecentlyPlayed(after12PM);
 
-            allTracks = [...allTracks, ...recentTracks];
-
-            const lastTrack = response.data.items[0];
-            nextBefore = new Date(lastTrack.played_at).getTime();
-            console.log("-----------------------")
-            console.log(`Fetched so far: ${allTracks.length}`);
-            console.log("Last track played at:", new Date(lastTrack.played_at).toISOString());
-            console.log("Next before:", new Date(nextBefore).toISOString());
-
-            if (nextBefore < start) break;
-        }
-        const { before12PM, after12PM } = splitTracksByTime(allTracks);
-
-        cachedRecentPlayed = {
+        req.session.cachedRecentPlayed = {
             before12PM,
             after12PM,
             allTracks,
         };
-        lastFetchedDate = todayUTC;
+
+        req.session.lastFetchedTime = currentTime;
         
         console.log("----------------Before 12PM tracks:", before12PM.length);
         console.log("----------------After 12PM tracks:", after12PM.length);
         console.log("----------------All tracks:", allTracks.length);
-        return cachedRecentPlayed;
+        return req.session.cachedRecentPlayed;
     } catch (error) {
-        if (error.response && error.response.status === 401) {
-            console.error("Spotify access token is invalid or expired. Clearing cache.");
-            // cachedRecentPlayed = null;
-            // lastFetchedDate = null;
-            throw new Error("Spotify access token is invalid or expired. Please log in again.");
-        } else {
-            console.error("Error fetching recently played tracks:", error.message);
-            throw error;
-        }
+        console.error("Error fetching recently played tracks:", error.message);
+        throw error;
     }
 };

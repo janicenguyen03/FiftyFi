@@ -33,7 +33,7 @@ function TopTracks() {
             setMainstreamTrack(data.mainstreamTrack || {});
             setUnderratedTrack(data.underratedTrack || {});
         })
-        .catch(err => console.error('Error fetching most repeated tracks:', err));
+        .catch(err => console.error('Error fetching tracks insights:', err));
     }, [])
 
     return (

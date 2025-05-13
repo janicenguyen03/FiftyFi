@@ -70,6 +70,10 @@ router.get("/callback", async (req, res) => {
 
     req.session.access_token = access_token;
     req.session.refresh_token = refresh_token;
+
+    req.session.cachedRecentlyPlayed = null;
+    req.session.lastFetchedTime = null;
+    
     req.session.save(err => {
       if (err) {
         console.error("Error saving session:", err);
