@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-function PackTwo() {
+function Artists() {
     const BACKEND_URL = "http://localhost:5000";
 
     const navigate = useNavigate();
@@ -118,4 +118,4 @@ function PackTwo() {
     );
 }
 
-export default PackTwo;
+export default Artists;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function TopTracks() {
+function Tracks() {
     const navigate = useNavigate();
     const [topTracks, setTopTracks] = useState([]);
     const [mostRepeatedTrack, setMostRepeatedTrack] = useState({});
@@ -109,4 +109,4 @@ function TopTracks() {
     );
 }
 
-export default TopTracks;
+export default Tracks;

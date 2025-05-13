@@ -13,17 +13,15 @@ export async function getLatestTrack(req, res) {
     });
 
     const latestTrack = response.data.items[0];
+      
     return res.json({
-      name: latestTrack.track.name,
-      id: latestTrack.track.id,
       name: latestTrack.track.name,
       artists: latestTrack.track.artists
         .map((artist) => artist.name)
         .join(", "),
-      album: latestTrack.track.album.name,
       image: latestTrack.track.album.images[0]?.url,
       spotifyUrl: latestTrack.track.external_urls.spotify,
-      duration: latestTrack.track.duration_ms,
+      previewUrl: latestTrack.track.preview_url,
     });
   } catch (error) {
     console.error("Error fetching recently played tracks:", error.message);
@@ -56,7 +54,7 @@ export async function getPlaylistFollowers(req, res) {
       }
     }
 
-    return followers;
+    return res.json(followers);
   } catch (error) {
     console.error("Error fetching playlist followers:", error.message);
     res.status(500).json({ error: error.message });

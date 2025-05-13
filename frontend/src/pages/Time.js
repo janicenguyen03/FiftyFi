@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 
-function PackOne() {
+function Time() {
     const BACKEND_URL = "http://localhost:5000";
 
     const navigate = useNavigate();
@@ -71,14 +71,14 @@ function PackOne() {
                 <div>
                     <p>You have listened to Spotify for 
                         a total of {totalTimeBefore.hours} hours {totalTimeBefore.minutes} minutes 
-                        and {totalTimeBefore.second} seconds before 5PM</p>
+                        and {totalTimeBefore.second} seconds before 12PM</p>
                 </div>    
             )}
             { totalTimeAfter && (
                 <div>
                     <p>You have listened to Spotify for 
                         a total of {totalTimeAfter.hours} hours {totalTimeAfter.minutes} minutes 
-                        and {totalTimeAfter.second} seconds after 5PM</p>
+                        and {totalTimeAfter.second} seconds after 12PM</p>
                 </div>    
             )}
             { totalTime && (
@@ -90,7 +90,7 @@ function PackOne() {
             )}
             { mostRepeatedBefore && mostRepeatedBefore.name && (
                 <div>
-                    <h2>Most Repeated Track Before 5PM</h2>
+                    <h2>Most Repeated Track Before 12PM</h2>
                     <p>{mostRepeatedBefore.name}</p>
                     <p>{mostRepeatedBefore.artists}</p>
                     <a href={mostRepeatedBefore.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
@@ -98,7 +98,7 @@ function PackOne() {
             )}
             { mostRepeatedAfter && mostRepeatedAfter.name && (
                 <div>
-                    <h2>Most Repeated Track After 5PM</h2>
+                    <h2>Most Repeated Track After 12PM</h2>
                     <p>{mostRepeatedAfter.name}</p>
                     <p>{mostRepeatedAfter.artists}</p>
                     <a href={mostRepeatedAfter.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
@@ -106,7 +106,7 @@ function PackOne() {
             )}
             { mostSkippedBefore && mostSkippedBefore.name && (
                 <div>
-                    <h2>Most Skipped Track Before 5PM</h2>
+                    <h2>Most Skipped Track Before 12PM</h2>
                     <p>{mostSkippedBefore.name}</p>
                     <p>{mostSkippedBefore.artists}</p>
                     <a href={mostSkippedBefore.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
@@ -114,7 +114,7 @@ function PackOne() {
             )}
             { mostSkippedAfter && mostSkippedAfter.name &&  (
                 <div>
-                    <h2>Most Skipped Track After 5PM</h2>
+                    <h2>Most Skipped Track After 12PM</h2>
                     <p>{mostSkippedAfter.name}</p>
                     <p>{mostSkippedAfter.artists}</p>
                     <a href={mostSkippedAfter.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
@@ -125,4 +125,4 @@ function PackOne() {
     );
 }
 
-export default PackOne;
+export default Time;

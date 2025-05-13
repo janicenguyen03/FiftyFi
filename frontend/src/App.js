@@ -1,10 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import Library from "./pages/Library";
-import TopTracks from "./pages/TopTracks";
-import PackOne from "./pages/PackOne";
-import PackTwo from "./pages/PackTwo";
+import Tracks from "./pages/Tracks";
+import Time from "./pages/Time";
+import Artists from "./pages/Artists";
 
 function App() {
   return (
@@ -12,10 +11,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/library" element={<Library />} />
-        <Route path="/top-tracks" element={<TopTracks />} />
-        <Route path="/pack-one" element={<PackOne />} />
-        <Route path="/pack-two" element={<PackTwo />} />
+        <Route path="/tracks" element={<Tracks />} />
+        <Route path="/time" element={<Time />} />
+        <Route path="/artists" element={<Artists />} />
       </Routes>
     </Router>
   );
