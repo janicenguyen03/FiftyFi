@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Profile from "../components/Profile";
+import PlayTrack from "../components/PlayTrack";
 
 function Home() {
   const BACKEND_URL = "http://localhost:5000";
@@ -81,11 +82,11 @@ function Home() {
   }
 
   return (
-    <div className="p-10 h-screen background text-neutral-100">
-      <div className="max-w-screen-2xl mx-auto">
+    <div className="p-10 min-h-screen md:h-screen background text-neutral-100">
+      <div className="lg:max-w-screen-xl max-w-screen-md mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <div>
+          <div className="flex items-center">
             <h1 className="text-5xl font-bold">
               <img
                 src={process.env.PUBLIC_URL + "white-icon.png"}
@@ -100,27 +101,38 @@ function Home() {
 
         {/* Stats */}
         <div className="flex-grow flex items-center justify-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl py-10 mx-auto">
-          <div className="home-card">Your Recent Listening</div>
-          <div onClick={() => navigate("/tracks")} className="home-card text-center">
-            Trackify
-          </div>
-          <div onClick={() => navigate("/time")} className="home-card text-center">
-            Timify
-          </div>
-          <div onClick={() => navigate("/artists")} className="home-card text-center">
-            Artify
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl my-5 py-10 mx-auto">
+            <PlayTrack track={lastTrack} />
+            <div
+              onClick={() => navigate("/tracks")}
+              className="home-card home-card-btn"
+            >
+              Trackify
+            </div>
+            <div
+              onClick={() => navigate("/time")}
+              className="home-card home-card-btn"
+            >
+              Timify
+            </div>
+            <div
+              onClick={() => navigate("/artists")}
+              className="home-card home-card-btn"
+            >
+              Artify
+            </div>
           </div>
         </div>
-        </div>
-        
+      </div>
 
+      {/* Footer */}
+      <div className="flex flex-col items-center justify-center mt-10 pt-20 lg:pt-0">
         <button className="btn" onClick={handleLogout}>
-            Logout
-          </button>
-          <footer className="absolute bottom-8 font-bold text-gray-300 text-md">
-            @ 2025 Developed by Janice. All rights reserved.
-          </footer>
+          Logout
+        </button>
+        <footer className="font-bold text-gray-300 text-md text-center mt-auto">
+          @ 2025 Developed by Janice. All rights reserved.
+        </footer>
       </div>
     </div>
   );
