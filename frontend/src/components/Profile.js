@@ -20,7 +20,7 @@ function Profile({ user, playlistFollowers }) {
       <div className="flex flex-col">
         <h2 className="text-xl font-bold pb-3 pt-2">{user.name}</h2>
         {loading ? (
-          <Spinner />
+          <Spinner size="4" />
         ) : (
           <div className="flex items-center text-gray-400 text-md cursor-pointer relative group">
             <p>

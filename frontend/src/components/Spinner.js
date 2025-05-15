@@ -1,9 +1,9 @@
-function Spinner() {
+function Spinner({size}) {
   return (
     <div role="status">
       <svg
         aria-hidden="true"
-        class="inline w-4 h-4 text-neutral-200 animate-spin dark:text-neutral-600 fill-green-800/50"
+        class={`inline w-${size} h-${size} text-neutral-200 animate-spin dark:text-neutral-600 fill-green-800/50`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

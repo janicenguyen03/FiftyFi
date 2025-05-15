@@ -22,6 +22,7 @@ export async function getTopTracks(req, res) {
             album: track.album.name,
             image: track.album.images[0]?.url,
             spotifyUrl: track.external_urls.spotify,
+            release: track.album.release_date,
             duration: track.duration_ms,
         }));
 

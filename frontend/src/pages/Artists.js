@@ -41,19 +41,19 @@ function Artists() {
 
     return (
         <div className="background text-white pack-two">
-            <h1>Pack Two</h1>
+            <h1 className="text-2xl font-extrabold py-10">Artist Insights in your latest 50 tracks</h1>
             <button className="btn" onClick={() => {
                 navigate("/home")}}>
                 Back 
             </button>
 
-            <h2>Top Artists</h2>
+            <h2 className="text-xl font-bold py-5">Top Artists</h2>
             <ul>
                 {topArtists.map((artist) => (
-                    <div key={artist.id}>
+                    <div key={artist.id} className="mb-5">
                         <img src={artist.image} alt={artist.name} />
-                        <h3>{artist.name}</h3>
-                        <p>{artist.id}</p>
+                        <h3 className="font-semibold text-lg mb-1">{artist.name}</h3>
+                        <p className="mb-1">{artist.id}</p>
                         <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                     </div>
                 ))}
@@ -62,55 +62,67 @@ function Artists() {
 
             {/* most repeated song */}
             { mostRepeatedArtist.name && (
-                <div>
-                    <h2>Most Repeated Artist</h2>
+                <div className="mb-5">
+                    <h2 className="font-semibold text-xl">Most Repeated Artist</h2>
+                    <img src={mostRepeatedArtist.image} alt={mostRepeatedArtist.name} />
                     <p>{mostRepeatedArtist.name}</p>
                     <p>Count: {mostRepeatedArtist.count}</p>
+                    <a href={mostRepeatedArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
             )}
             
             {/* guilty pleasure song */}
             {/* the song you skipped the most */}
             { mostSkippedArtist.name && (
-                <div>
-                    <h2>Most Skipped Artist</h2>
+                <div className="mb-5">
+                    <h2 className="font-semibold text-xl">Most Skipped Artist</h2>
+                    <img src={mostSkippedArtist.image} alt={mostSkippedArtist.name} />
                     <p>{mostSkippedArtist.name}</p>
                     <p>Count: {mostSkippedArtist.count}</p>
+                    <a href={mostSkippedArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
             )}
 
             {/* love hate song */}
             { loveHateArtist.name && (
-                <div>
-                    <h2>Love Hate Artist</h2>
+                <div className="mb-5">
+                    <h2 className="font-semibold text-xl">Love Hate Artist</h2>
+                    <img src={loveHateArtist.image} alt={loveHateArtist.name} />
                     <p>{loveHateArtist.name}</p>
+                    <a href={loveHateArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
             )}
 
                 
             {/* most mainstream song */}
             { mainstreamArtist.name && (
-                <div>
-                    <h2>Most Mainstream Artist</h2>
+                <div className="mb-5">
+                    <h2 className="font-semibold text-xl">Most Mainstream Artist</h2>
+                    <img src={mainstreamArtist.image} alt={mainstreamArtist.name} />
                     <p>{mainstreamArtist.name}</p>
                     <p>Popularity: {mainstreamArtist.count}</p>
+                    <a href={mainstreamArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
             )}
 
             {/* most underrated song */}
             { underratedArtist.name && (
-                <div>
-                    <h2>Most Underrated Artist</h2>
+                <div className="mb-5">
+                    <h2 className="font-semibold text-xl">Most Underrated Artist</h2>
+                    <img src={underratedArtist.image} alt={underratedArtist.name} />
                     <p>{underratedArtist.name}</p>
                     <p>Popularity: {underratedArtist.count}</p>
+                    <a href={underratedArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
             )}
 
             { mostFeaturedArtist.name && (
-                <div>
-                    <h2>Most Featured Artist</h2>
+                <div className="mb-5">
+                    <h2 className="font-semibold text-xl">Most Featured Artist</h2>
+                    <img src={mostFeaturedArtist.image} alt={mostFeaturedArtist.name} />
                     <p>{mostFeaturedArtist.name}</p>
                     <p>Count: {mostFeaturedArtist.count}</p>
+                    <a href={mostFeaturedArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
             )}
 

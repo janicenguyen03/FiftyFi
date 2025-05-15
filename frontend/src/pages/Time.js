@@ -43,53 +43,52 @@ function Time() {
     }, []);
 
     return (
-        <div className="background text-white pack-one">
-            <h1>Pack One</h1>
-            <button className="btn" onClick={() => {
+        <div className="background min-h-screen text-white pack-one flex flex-col items-center gap-4">
+            <button className="btn mt-3" onClick={() => {
                 navigate("/home")}}>
                 Back 
             </button>
-            <p>This is the first pack of insights.</p>
+            <h1 className="text-2xl font-extrabold">Your Time Insights for the past 50 tracks</h1>
 
             { partOfDayBefore && (
-                <div>
-                    <p>You have listened to Spotify for {partOfDayBefore}% of the time before 12PM</p>
+                <div className="analysis-card">
+                    <p>You have listened to Spotify for <b>{partOfDayBefore}% </b>of the time before 12PM</p>
                 </div>    
             )}
 
             { partOfDayAfter && (
-                <div>
-                    <p>You have listened to Spotify for {partOfDayAfter}% of the time after 12PM</p>
+                <div className="analysis-card">
+                    <p>You have listened to Spotify for <b>{partOfDayAfter}% </b>of the time after 12PM</p>
                 </div>    
             )}
             { partOfDay && (
-                <div>
+                <div className="analysis-card">
                     <p>You have listened to Spotify for {partOfDay}% of the time in total</p>
                 </div>    
             )}
             { totalTimeBefore && (
-                <div>
+                <div className="analysis-card">
                     <p>You have listened to Spotify for 
                         a total of {totalTimeBefore.hours} hours {totalTimeBefore.minutes} minutes 
                         and {totalTimeBefore.second} seconds before 12PM</p>
                 </div>    
             )}
             { totalTimeAfter && (
-                <div>
+                <div className="analysis-card">
                     <p>You have listened to Spotify for 
                         a total of {totalTimeAfter.hours} hours {totalTimeAfter.minutes} minutes 
                         and {totalTimeAfter.second} seconds after 12PM</p>
                 </div>    
             )}
             { totalTime && (
-                <div>
+                <div className="analysis-card">
                     <p>You have listened to Spotify for 
                         a total of {totalTime.hours} hours {totalTime.minutes} minutes 
                         and {totalTime.second} seconds in total</p>
                 </div>    
             )}
             { mostRepeatedBefore && mostRepeatedBefore.name && (
-                <div>
+                <div className="analysis-card">
                     <h2>Most Repeated Track Before 12PM</h2>
                     <p>{mostRepeatedBefore.name}</p>
                     <p>{mostRepeatedBefore.artists}</p>
@@ -97,7 +96,7 @@ function Time() {
                 </div>    
             )}
             { mostRepeatedAfter && mostRepeatedAfter.name && (
-                <div>
+                <div className="analysis-card">
                     <h2>Most Repeated Track After 12PM</h2>
                     <p>{mostRepeatedAfter.name}</p>
                     <p>{mostRepeatedAfter.artists}</p>
@@ -105,7 +104,7 @@ function Time() {
                 </div>    
             )}
             { mostSkippedBefore && mostSkippedBefore.name && (
-                <div>
+                <div className="analysis-card">
                     <h2>Most Skipped Track Before 12PM</h2>
                     <p>{mostSkippedBefore.name}</p>
                     <p>{mostSkippedBefore.artists}</p>
@@ -113,7 +112,7 @@ function Time() {
                 </div>    
             )}
             { mostSkippedAfter && mostSkippedAfter.name &&  (
-                <div>
+                <div className="analysis-card">
                     <h2>Most Skipped Track After 12PM</h2>
                     <p>{mostSkippedAfter.name}</p>
                     <p>{mostSkippedAfter.artists}</p>

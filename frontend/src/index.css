@@ -14,17 +14,20 @@
     }
 
     .btn {
-        @apply mb-5 px-6 py-3 text-lg font-semibold bg-emerald-100/70 
-        hover:bg-emerald-900 hover:shadow-lg text-green-900
-        hover:shadow-emerald-950 hover:text-neutral-100 hover:font-medium
+        @apply mb-5 px-6 py-3 text-lg font-semibold shadow-lg
+        shadow-emerald-950/50 bg-gradient-to-r hover:bg-gradient-to-l 
+        from-emerald-100/70 to-neutral-200/50
+        hover:shadow-lg text-green-900
+        hover:shadow-green-200/20 hover:text-neutral-100 hover:font-medium
         active:bg-emerald-900 active:shadow-inner
-        transition duration-300 ease-in-out rounded-full shadow-md;
+        transition duration-300 ease-in-out rounded-full;
     }
 
     .home-card-btn {
         @apply  lg:px-44 lg:py-24 py-20 px-32 
-        hover:bg-emerald-800 hover:shadow-lg 
-        hover:shadow-emerald-950 hover:text-neutral-100
+        bg-gradient-to-tr hover:bg-gradient-to-br 
+        from-emerald-900/70 to-neutral-900/50
+        hover:shadow-lg hover:shadow-emerald-950 hover:text-neutral-100
         active:bg-emerald-900 active:shadow-inner 
         transition duration-300 ease-in-out text-center
         shadow-lg shadow-emerald-900/30 cursor-pointer text-xl font-medium;
@@ -39,5 +42,16 @@
         @apply absolute mt-2 hidden
         group-hover:block bg-gray-700 text-white text-xs
         px-2 py-1 rounded shadow-lg whitespace-nowrap
+    }
+
+    .analysis-card {
+        @apply bg-neutral-900/50 border-2 border-neutral-300/20
+        rounded-lg shadow-lg shadow-emerald-900/30
+        p-5 mx-10 min-w-[700px] max-w-[900px]
+        transition duration-300 ease-in-out;
+        &:hover {
+            @apply bg-neutral-900/70 border-neutral-300/30
+            shadow-lg shadow-emerald-900/50;
+        }
     }
 }

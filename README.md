@@ -1,4 +1,4 @@
-*** Trackify ***
+*** FiftyFi ***
 
 Spotify Wrapped and LastFM scrobble inspired with some additional special features like
     - time spent 24 hours

@@ -7,6 +7,7 @@ function getTrackDetail(item, count, type) {
             album: item.track.album.name,
             image: item.track.album.images[0]?.url,
             spotifyUrl: item.track.external_urls.spotify,
+            release: item.track.album.release_date,
             duration: item.track.duration_ms,
             count,
             type,

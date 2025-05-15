@@ -31,10 +31,16 @@ export async function getLatestTrack(req, res) {
 
 export async function getPlaylistFollowers(req, res) {
   const token = req.session.access_token;
+  const now = new Date();
 
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
   } 
+
+  if (req.session.playlistSaveCounts && req.session.lastFetchedTime && (now - req.session.lastFetchedTime) < 60 * 60 * 1000) {
+    console.log("Returning cached playlist followers count");
+    return res.json(req.session.playlistSaveCounts);
+  }
 
   const headers = {
     Authorization: `Bearer ${token}`,
@@ -54,7 +60,9 @@ export async function getPlaylistFollowers(req, res) {
       }
     }
 
-    return res.json(followers);
+    req.session.lastFetchedTime = now;
+    req.session.playlistSaveCounts = followers;
+    return res.json(req.session.playlistSaveCounts);
   } catch (error) {
     console.error("Error fetching playlist followers:", error.message);
     res.status(500).json({ error: error.message });
