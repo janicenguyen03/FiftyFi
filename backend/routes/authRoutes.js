@@ -19,7 +19,7 @@ const AUTH_URL = "https://accounts.spotify.com/authorize?";
 router.get("/login", (req, res) => {
     const scopes =
         "user-top-read user-read-recently-played user-follow-read \
-        user-read-currently-playing";
+        user-read-currently-playing playlist-read-private playlist-read-collaborative";
 
     res.redirect(AUTH_URL +
             querystring.stringify({

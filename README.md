@@ -27,6 +27,8 @@ To provide these insights, FiftyFi requests the following Spotify API scopes:
 - `user-read-recently-played`
 - `user-follow-read`
 - `user-read-currently-playing`
+- `playlist-read-private`
+- `playlist-read-collaborative`
 
 ## Getting Started
 
