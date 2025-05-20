@@ -32,12 +32,16 @@ export async function getLatestTrack(req, res) {
 export async function getPlaylistFollowers(req, res) {
   const token = req.session.access_token;
   const now = new Date();
+  const lastFetchedTimeDate = req.session.lastFetchedTime ? new Date(req.session.lastFetchedTime) : null;
 
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
-  } 
-
-  if (req.session.playlistSaveCounts && req.session.lastFetchedTime && (now - req.session.lastFetchedTime) < 60 * 60 * 1000) {
+  };
+  if (
+    req.session.playlistSaveCounts &&
+    req.session.lastFetchedTime &&
+    (now - lastFetchedTimeDate) < 60 * 60 * 1000
+  ) {
     console.log("Returning cached playlist followers count");
     return res.json(req.session.playlistSaveCounts);
   }
@@ -46,12 +50,18 @@ export async function getPlaylistFollowers(req, res) {
     Authorization: `Bearer ${token}`,
   };
   try {
-    const url = `${API_BASE_URL}/me/playlists?limit=50`;
-    const playlistsRes = await axios.get(url, {headers});
+    const userId = req.session.user.id;
+    const url = `${API_BASE_URL}/me/playlists`;
+    const playlistsRes = await axios.get(url, { headers });
     const playlists = playlistsRes.data.items;
 
+    const filteredPlaylists = playlists.filter(
+      (playlist) => playlist.owner.id === userId
+    );
+
     let followers = 0;
-    for (const playlist of playlists) {
+    for (const playlist of filteredPlaylists) {
+      console.log("Playlist:", playlist.name);
       const playlistId = playlist.id;
       const url = `${API_BASE_URL}/playlists/${playlistId}`;
       const response = await axios.get(url, { headers });
@@ -59,9 +69,10 @@ export async function getPlaylistFollowers(req, res) {
         followers += response.data.followers.total;
       }
     }
-
-    req.session.lastFetchedTime = now;
+    
+    req.session.lastFetchedTime = now.toISOString();
     req.session.playlistSaveCounts = followers;
+
     return res.json(req.session.playlistSaveCounts);
   } catch (error) {
     console.error("Error fetching playlist followers:", error.message);

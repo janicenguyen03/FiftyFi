@@ -71,7 +71,7 @@ router.get("/callback", async (req, res) => {
     req.session.access_token = access_token;
     req.session.refresh_token = refresh_token;
 
-    req.session.playlistSaveCounts = null;
+    req.session.playlistSaveCounts = 0;
     req.session.cachedRecentlyPlayed = null;
     req.session.lastFetchedTime = null;
     
