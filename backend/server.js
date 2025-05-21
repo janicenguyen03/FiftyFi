@@ -61,6 +61,11 @@ const PORT = process.env.PORT || 5000;
 
 app.use('/', authRoutes);
 
+app.use('/api/home', homeRoutes);
+app.use('/api/tracks', trackRoutes);
+app.use('/api/time-spent', timeRoutes);
+app.use('/api/artist', artistRoutes);
+
 app.get("/", (req, res) => {
   res.send("Fiftyfi backend is running!");
 });
@@ -73,10 +78,6 @@ app.get("/api/check-session", (req,res) => {
   res.json({session: req.session});
 });
 
-app.use('/api/home', homeRoutes);
-app.use('/api/tracks', trackRoutes);
-app.use('/api/time-spent', timeRoutes);
-app.use('/api/artist', artistRoutes);
 
 app.listen(PORT, () => {
   console.log(`Backend is running on port ${PORT}`);
