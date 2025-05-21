@@ -1,5 +1,5 @@
 function Login() {
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+  const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
   return (
     <div className="flex flex-col h-screen w-full items-center justify-center login-background text-gray-100">
       <h1 className="text-5xl font-bold mb-10 pr-5">

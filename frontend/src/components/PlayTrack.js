@@ -33,7 +33,7 @@ function PlayTrack({ track }) {
   return (
     <div className="home-card shadow-inner shadow-green-200/30">
       {loading ? (
-          <Spinner size="8" />
+          <Spinner size="6" />
       ) : (
         <div className="flex gap-4 lg:gap-6 items-center flex-row p-6 lg:p-10  mt-4">
           <img

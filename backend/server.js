@@ -7,11 +7,18 @@ import homeRoutes from "./routes/homeRoutes.js";
 import trackRoutes from "./routes/trackRoutes.js";
 import artistRoutes from "./routes/artistRoutes.js";
 import timeRoutes from "./routes/timeRoutes.js";
+import { createClient } from "redis";
+import { createRequire } from "module";
+import path from "path";
+
+const require = createRequire(import.meta.url);
 
 const app = express();
 
+env.config();
+
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 
@@ -19,14 +26,35 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-env.config();
-
-app.use(session({
+let sessionOptions = {
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, httpOnly: true }
-}));
+  cookie: { 
+    maxAge: 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === "production", 
+    httpOnly: true }
+};
+
+
+if (process.env.NODE_ENV === "production") {
+  const redisClient = createClient({ url: process.env.REDIS_URL });
+  await redisClient.connect();
+
+  const { default: RedisStore } = require("connect-redis");
+  const store = new RedisStore({
+    client: redisClient,
+    prefix: "session:",
+  });
+  app.use(session({
+    ...sessionOptions,
+    store: store,
+  }));
+} else {
+  app.use(session(sessionOptions));
+}
+
+// app.use(session({sessionOptions}));
 
 const PORT = process.env.PORT || 5000;
 

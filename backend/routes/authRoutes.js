@@ -11,6 +11,7 @@ env.config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
 const USER_URL = "https://api.spotify.com/v1/me";
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
@@ -74,13 +75,15 @@ router.get("/callback", async (req, res) => {
     req.session.playlistSaveCounts = 0;
     req.session.cachedRecentlyPlayed = null;
     req.session.lastFetchedTime = null;
+
+    // res.redirect(`${FRONTEND_URL}/home`);
     
     req.session.save(err => {
       if (err) {
         console.error("Error saving session:", err);
         return res.status(500).send("Session error");
       }
-      res.redirect("http://localhost:3000/home");
+      res.redirect(`${FRONTEND_URL}/home`);
     });
 
   } catch (error) {
@@ -98,15 +101,8 @@ router.get("/me", isAuthenticated, (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Error destroying session:", err);
-      return res.status(500).send("Error logging out");
-    }
-    res.clearCookie("connect.sid");
-    res.redirect("http://localhost:3000/");
-
-  });
+  req.session = null;
+  res.redirect(`${FRONTEND_URL}`);
 });
 
 export default router;
