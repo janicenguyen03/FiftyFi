@@ -9,7 +9,7 @@ import artistRoutes from "./routes/artistRoutes.js";
 import timeRoutes from "./routes/timeRoutes.js";
 import { createClient } from "redis";
 import { createRequire } from "module";
-import * as connectRedis from "connect-redis";
+import { RedisStore } from "connect-redis";
 import path from "path";
 
 const require = createRequire(import.meta.url);
@@ -42,7 +42,7 @@ if (process.env.NODE_ENV === "production") {
   const redisClient = createClient({ url: process.env.REDIS_URL });
   await redisClient.connect();
 
-  const RedisStore = connectRedis(session);
+  // const RedisStore = connectRedis(session);
 
   app.use(session({
     ...sessionOptions,
