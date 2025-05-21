@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Artists() {
-    const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
+    const BACKEND_URL = process.env.BACKEND_URL;
 
     const navigate = useNavigate();
     const [topArtists, setTopArtists] = useState([]);
