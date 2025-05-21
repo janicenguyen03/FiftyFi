@@ -32,9 +32,11 @@ let sessionOptions = {
 app.set('trust proxy', 1);
 
 if (process.env.NODE_ENV === "production") {
+  console.log("Production mode");
   const redisClient = createClient({ url: process.env.REDIS_URL });
   await redisClient.connect();
 
+  console.log("Redis client connected");
   // const RedisStore = connectRedis(session);
 
   app.use(session({
