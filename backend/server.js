@@ -60,7 +60,7 @@ if (process.env.NODE_ENV === "production") {
 const PORT = process.env.PORT || 5000;
 
 app.use((req, res, next) => {
-  console.log("Incoming request:", req.method, req.originalUrl);
+  console.log("Incoming request:", req.method);
   next();
 });
 

@@ -40,7 +40,7 @@ function Time() {
             setMostSkippedAfter(data.after12PM.mostSkippedTrack || {});
         })
         .catch(err => console.error('Error fetching time insights:', err));
-    }, []);
+    }, [BACKEND_URL]);
 
     return (
         <div className="background min-h-screen text-white pack-one flex flex-col items-center gap-4">

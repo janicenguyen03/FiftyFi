@@ -25,7 +25,9 @@ function totalTimeListened(recentlyPlayed) {
         timeAdded = playDuration > actualDuration ? actualDuration : playDuration;
         totalTime += timeAdded;
     }
-    console.log("Total time listened:", totalTime);
+    if (process.env.NODE_ENV !== "production") {
+        console.log("Total time listened in ms:", totalTime);
+    };
 
     return totalTime;
 }
@@ -72,7 +74,9 @@ export async function getTimeInsights(req, res) {
             totalTime: totalTimeAfter } = countTime(totalMsAfter12PM, 12);
         const { partOfDayPercentage, totalTime } = countTime(totalMs, 24);
 
-        console.log(partOfDayPercentageBefore, partOfDayPercentageAfter, partOfDayPercentage);
+        if (process.env.NODE_ENV !== "production") {
+            console.log(partOfDayPercentageBefore, partOfDayPercentageAfter, partOfDayPercentage);
+        }
 
         const { repeatedTracks: repeatedBefore12PM, 
             skippedTracks: skippedBefore12PM } = getRepeatedSkipped(before12PM, getTrackID);

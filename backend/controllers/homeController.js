@@ -3,25 +3,38 @@ import axios from "axios";
 const API_BASE_URL = "https://api.spotify.com/v1";
 
 export async function getLatestTrack(req, res) {
-  try {
-    const token = req.session.access_token;
-    const url = `${API_BASE_URL}/me/player/recently-played?limit=1;`;
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const token = req.session.access_token;
 
-    const latestTrack = response.data.items[0];
-      
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  try {
+    const currentUrl = `${API_BASE_URL}/me/player/currently-playing`;
+    const currentRes = await axios.get(currentUrl, { headers });
+    let trackData = null;
+
+    if (currentRes.data && currentRes.data.item) {
+      trackData = currentRes.data.item;
+    } else {
+      const url = `${API_BASE_URL}/me/player/recently-played?limit=1;`;
+      const response = await axios.get(url, { headers });
+
+      trackData = response.data.items[0].track;
+    }
+    
     return res.json({
-      name: latestTrack.track.name,
-      artists: latestTrack.track.artists
+      name: trackData.name,
+      artists: trackData.artists
         .map((artist) => artist.name)
         .join(", "),
-      image: latestTrack.track.album.images[0]?.url,
-      spotifyUrl: latestTrack.track.external_urls.spotify,
-      previewUrl: latestTrack.track.preview_url,
+      image: trackData.album.images[0]?.url,
+      spotifyUrl: trackData.external_urls.spotify,
+      previewUrl: trackData.preview_url,
     });
   } catch (error) {
     console.error("Error fetching recently played tracks:", error.message);
@@ -34,10 +47,10 @@ export async function getPlaylistFollowers(req, res) {
   const now = new Date();
   const lastFetchedTimeDate = req.session.lastFetchedTime ? new Date(req.session.lastFetchedTime) : null;
 
-  if (req.session.playlistSaveCounts) {
+  if (process.env.NODE_ENV !== "production" && req.session.playlistSaveCounts) {
     console.log("Playlist followers count:", req.session.playlistSaveCounts);
   }
-  if (req.session.lastFetchedTime) {
+  if (process.env.NODE_ENV !== "production" && req.session.lastFetchedTime) {
     console.log("Last fetched time:", req.session.lastFetchedTime);
   }
 
@@ -79,8 +92,11 @@ export async function getPlaylistFollowers(req, res) {
     
     req.session.lastFetchedTime = now.toISOString();
     req.session.playlistSaveCounts = followers;
-    console.log("Total followers:", req.session.playlistSaveCounts);
-    console.log("Last fetched time:", req.session.lastFetchedTime);
+    if (process.env.NODE_ENV !== "production") {
+      console.log("Total followers:", req.session.playlistSaveCounts);
+      console.log("Last fetched time:", req.session.lastFetchedTime);
+    };
+    
 
     return res.json(req.session.playlistSaveCounts);
   } catch (error) {

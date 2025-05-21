@@ -28,10 +28,11 @@ function Home() {
         setLoading(false);
       })
       .catch((error) => {
+        console.log(`${BACKEND_URL}/me`);
         console.error("Error fetching user data: ", error);
         navigate("/");
       });
-  }, [navigate]);
+  }, [navigate, BACKEND_URL]);
 
   // Get last track played
   useEffect(() => {
@@ -41,12 +42,14 @@ function Home() {
       .then((response) => response.json())
       .then((data) => {
         setLastTrack(data || {});
-        console.log("Last track played:", data);
+        if (!process.env.NODE_ENV) {
+          console.log("Last track played:", data);
+        }
       })
       .catch((err) =>
         console.error("Error fetching most repeated tracks:", err)
       );
-  }, []);
+  }, [BACKEND_URL]);
 
   // Get playlist followers
   useEffect(() => {
@@ -56,12 +59,14 @@ function Home() {
       .then((response) => response.json())
       .then((data) => {
         setPlaylistFollowers(data || 0);
-        console.log("Playlist followers:", data);
+        if (!process.env.NODE_ENV) {
+          console.log("Playlist followers count:", data);
+        }
       })
       .catch((err) =>
         console.error("Error fetching most repeated tracks:", err)
       );
-  }, []);
+  }, [BACKEND_URL]);
 
   // Check if homepage is visited, if not load the framer motion
   useEffect(() => {

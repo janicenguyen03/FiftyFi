@@ -21,7 +21,7 @@ function Tracks() {
             setTopTracks(data.topTracks || []);
         })
         .catch(err => console.error('Error fetching top tracks:', err));
-    }, []);
+    }, [BACKEND_URL]);
 
     useEffect(() => {
         fetch(`${BACKEND_URL}/api/tracks/insights`, {
@@ -36,7 +36,7 @@ function Tracks() {
             setUnderratedTrack(data.underratedTrack || {});
         })
         .catch(err => console.error('Error fetching tracks insights:', err));
-    }, [])
+    }, [BACKEND_URL])
 
     return (
         <div className="background text-white">

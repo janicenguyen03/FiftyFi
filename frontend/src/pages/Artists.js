@@ -21,7 +21,7 @@ function Artists() {
             setTopArtists(data.topArtists || []);
         })
         .catch(err => console.error('Error fetching top artists:', err));
-    }, []);
+    }, [BACKEND_URL]);
     
     useEffect(() => {
         fetch(`${BACKEND_URL}/api/artist/insights`, {
@@ -37,7 +37,7 @@ function Artists() {
             setUnderratedTrack(data.underratedArtist || {});
         })
         .catch(err => console.error('Error fetching artists insights:', err));
-    }, []);    
+    }, [BACKEND_URL]);    
 
     return (
         <div className="background text-white pack-two">
