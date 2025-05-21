@@ -59,6 +59,10 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 
+app.get("/", (req, res) => {
+  res.send("Fiftyfi backend is running!");
+});
+
 app.get("/api/test", (req, res) => {
   res.json({ message: "Hello from server!" });
 });
