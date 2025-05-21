@@ -27,11 +27,6 @@ let sessionOptions = {
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { 
-    maxAge: 24 * 60 * 60 * 1000,
-    secure: process.env.NODE_ENV === "production", 
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    httpOnly: true }
 };
 
 
@@ -43,6 +38,11 @@ if (process.env.NODE_ENV === "production") {
 
   app.use(session({
     ...sessionOptions,
+    cookie: { 
+      maxAge: 24 * 60 * 60 * 1000,
+      secure: true, 
+      sameSite: "none",
+      httpOnly: true },
     store: new RedisStore({ 
       client: redisClient,
       prefix: 'session:',

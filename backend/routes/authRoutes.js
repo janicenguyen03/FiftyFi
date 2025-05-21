@@ -83,6 +83,7 @@ router.get("/callback", async (req, res) => {
         console.error("Error saving session:", err);
         return res.status(500).send("Session error");
       }
+      console.log("Session saved successfully");
       res.redirect(`${FRONTEND_URL}/home`);
     });
 
