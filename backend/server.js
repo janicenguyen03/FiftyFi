@@ -8,11 +8,7 @@ import trackRoutes from "./routes/trackRoutes.js";
 import artistRoutes from "./routes/artistRoutes.js";
 import timeRoutes from "./routes/timeRoutes.js";
 import { createClient } from "redis";
-import { createRequire } from "module";
 import { RedisStore } from "connect-redis";
-import path from "path";
-
-const require = createRequire(import.meta.url);
 
 const app = express();
 
@@ -58,6 +54,11 @@ if (process.env.NODE_ENV === "production") {
 // app.use(session({sessionOptions}));
 
 const PORT = process.env.PORT || 5000;
+
+app.use((req, res, next) => {
+  console.log("Incoming request:", req.method, req.originalUrl);
+  next();
+});
 
 app.use('/', authRoutes);
 
