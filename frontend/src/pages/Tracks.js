@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Tracks() {
-    const BACKEND_URL = process.env.BACKEND_URL;
+    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
     const navigate = useNavigate();
     const [topTracks, setTopTracks] = useState([]);

@@ -2,7 +2,7 @@ import React, { useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 
 function Time() {
-    const BACKEND_URL = process.env.BACKEND_URL;
+    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
     const navigate = useNavigate();
     const [ partOfDayBefore, setPartOfDayBefore ] = useState(null);

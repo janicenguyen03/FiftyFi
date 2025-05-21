@@ -7,7 +7,7 @@ import Profile from "../components/Profile";
 import PlayTrack from "../components/PlayTrack";
 
 function Home() {
-  const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
