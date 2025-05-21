@@ -29,6 +29,7 @@ let sessionOptions = {
   saveUninitialized: false,
 };
 
+app.set('trust proxy', 1);
 
 if (process.env.NODE_ENV === "production") {
   const redisClient = createClient({ url: process.env.REDIS_URL });
