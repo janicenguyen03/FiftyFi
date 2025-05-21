@@ -59,6 +59,8 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 
+app.use('/', authRoutes);
+
 app.get("/", (req, res) => {
   res.send("Fiftyfi backend is running!");
 });
@@ -71,7 +73,6 @@ app.get("/api/check-session", (req,res) => {
   res.json({session: req.session});
 });
 
-app.use('/', authRoutes);
 app.use('/api/home', homeRoutes);
 app.use('/api/tracks', trackRoutes);
 app.use('/api/time-spent', timeRoutes);
