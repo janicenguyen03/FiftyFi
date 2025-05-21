@@ -9,7 +9,7 @@ import artistRoutes from "./routes/artistRoutes.js";
 import timeRoutes from "./routes/timeRoutes.js";
 import { createClient } from "redis";
 import { createRequire } from "module";
-import connectRedis from "connect-redis";
+import * as connectRedis from "connect-redis";
 import path from "path";
 
 const require = createRequire(import.meta.url);
