@@ -1,4 +1,5 @@
 function Login() {
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
   return (
     <div className="flex flex-col h-screen w-full items-center justify-center login-background text-gray-100">
       <h1 className="text-5xl font-bold mb-10 pr-5">
@@ -10,7 +11,7 @@ function Login() {
         />
         FiftyFi
       </h1>
-      <a href="http://localhost:5000/login">
+      <a href={`${BACKEND_URL}/login`}>
         <button className="btn text-xl">Login with Spotify</button>
       </a>
       <p className="lg:text-xl text-lg mt-16 text-neutral-200">

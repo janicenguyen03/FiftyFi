@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Tracks() {
+    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+
     const navigate = useNavigate();
     const [topTracks, setTopTracks] = useState([]);
     const [mostRepeatedTrack, setMostRepeatedTrack] = useState({});
@@ -12,7 +14,7 @@ function Tracks() {
 
     // Top Tracks
     useEffect(() => {
-        fetch(`http://localhost:5000/api/tracks/top`, {
+        fetch(`${BACKEND_URL}/api/tracks/top`, {
             credentials: "include"})
         .then((response) => response.json())
         .then((data) => {
@@ -22,7 +24,7 @@ function Tracks() {
     }, []);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/tracks/insights", {
+        fetch(`${BACKEND_URL}/api/tracks/insights`, {
             credentials: "include"
         })
         .then((response) => response.json())
