@@ -2,8 +2,6 @@
 
 FiftyFi is a music analytics tool that helps you gain insights into your listening habits by tracking your last 50 played tracks and analyzing your top items from the past month.
 
-# The app is now live on https://fiftyfi.vercel.app/
-
 ## Categories:
 
 - **Home page:** Display the playlist popularity and currently playing track (or latest played track)
