@@ -2,6 +2,9 @@
 
 FiftyFi is a music analytics tool that helps you gain insights into your listening habits by tracking your last 50 played tracks and analyzing your top items from the past month.
 
+- **Live Frontend:** https://fiftyfi.vercel.app/ (Deployed with Vercel)
+- **Live Backend:** https://fiftyfi.up.railway.app/login (Deployed with Railway)
+
 ## Categories:
 
 - **Home page:** Display the playlist popularity and currently playing track (or latest played track)
@@ -10,9 +13,6 @@ FiftyFi is a music analytics tool that helps you gain insights into your listeni
 - **Artify:** Explore insights about top 6 artists and other analysis including but not limited to most repeated or skipped artist
 
 ## Features
-
-- **Live Frontend:** https://fiftyfi.vercel.app/ (Deployed with Vercel)
-- **Live Backend:** https://fiftyfi.up.railway.app/login (Deployed with Railway)
 
 - **Latest Played Track:** Instantly view the most recently played track on the home page.
 - **Playlist Popularity:** See the total number of times your playlists have been saved by other users.
