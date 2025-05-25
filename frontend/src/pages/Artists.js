@@ -106,7 +106,9 @@ function Artists() {
 
             {/* most underrated song */}
             { underratedArtist.name && (
-                <div className="mb-5">
+                <div className={
+                    mostFeaturedArtist.name? "mb-5" : ""
+                }>
                     <h2 className="font-semibold text-xl">Most Underrated Artist</h2>
                     <img src={underratedArtist.image} alt={underratedArtist.name} />
                     <h3 className="font-semibold text-lg mb-1">{underratedArtist.name}</h3>
@@ -116,7 +118,7 @@ function Artists() {
             )}
 
             { mostFeaturedArtist.name && (
-                <div className="mb-5">
+                <div>
                     <h2 className="font-semibold text-xl">Most Featured Artist</h2>
                     <img src={mostFeaturedArtist.image} alt={mostFeaturedArtist.name} />
                     <h3 className="font-semibold text-lg mb-1">{mostFeaturedArtist.name}</h3>

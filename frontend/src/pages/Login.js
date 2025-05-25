@@ -15,7 +15,7 @@ function Login() {
         <button className="btn text-xl">Login with Spotify</button>
       </a>
       <p className="lg:text-xl text-lg mt-16 text-neutral-200">
-        @ 2025 Developed by Janice Nguyen.
+        @ {new Date().getFullYear()} Developed by Janice Nguyen.
       </p>
       <footer className="absolute bottom-8 font-semibold text-gray-300 text-md">
         This app uses the Spotify Web API but is not affiliated with or endorsed

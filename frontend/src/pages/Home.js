@@ -136,7 +136,7 @@ function Home() {
           Logout
         </button>
         <footer className="font-bold text-gray-300 text-md text-center mt-auto">
-          @ 2025 Developed by Janice. All rights reserved.
+          @ {new Date().getFullYear()} Developed by Janice. All rights reserved.
         </footer>
       </div>
     </div>
