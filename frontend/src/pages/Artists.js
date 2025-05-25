@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ArtistFetcher from "../fetcher/ArtistFetcher";
 
 function Artists() {
     const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
@@ -48,7 +49,8 @@ function Artists() {
             </button>
 
             <h2 className="text-xl font-bold py-5">Top Artists</h2>
-            <ul>
+            <ArtistFetcher />
+            {/* <ul>
                 {topArtists.map((artist) => (
                     <div key={artist.id} className="mb-5">
                         <img src={artist.image} alt={artist.name} />
@@ -56,11 +58,11 @@ function Artists() {
                         <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                     </div>
                 ))}
-            </ul>
+            </ul> */}
             
 
             {/* most repeated song */}
-            { mostRepeatedArtist.name && (
+            {/* { mostRepeatedArtist.name && (
                 <div className="mb-5">
                     <h2 className="font-semibold text-xl">Most Repeated Artist</h2>
                     <img src={mostRepeatedArtist.image} alt={mostRepeatedArtist.name} />
@@ -68,11 +70,11 @@ function Artists() {
                     <p>Count: {mostRepeatedArtist.count}</p>
                     <a href={mostRepeatedArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
-            )}
+            )} */}
             
             {/* guilty pleasure song */}
             {/* the song you skipped the most */}
-            { mostSkippedArtist.name && (
+            {/* { mostSkippedArtist.name && (
                 <div className="mb-5">
                     <h2 className="font-semibold text-xl">Most Skipped Artist</h2>
                     <img src={mostSkippedArtist.image} alt={mostSkippedArtist.name} />
@@ -80,21 +82,21 @@ function Artists() {
                     <p>Count: {mostSkippedArtist.count}</p>
                     <a href={mostSkippedArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
-            )}
+            )} */}
 
             {/* love hate song */}
-            { loveHateArtist.name && (
+            {/* { loveHateArtist.name && (
                 <div className="mb-5">
                     <h2 className="font-semibold text-xl">Love Hate Artist</h2>
                     <img src={loveHateArtist.image} alt={loveHateArtist.name} />
                     <h3 className="font-semibold text-lg mb-1">{loveHateArtist.name}</h3>
                     <a href={loveHateArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
-            )}
+            )} */}
 
                 
             {/* most mainstream song */}
-            { mainstreamArtist.name && (
+            {/* { mainstreamArtist.name && (
                 <div className="mb-5">
                     <h2 className="font-semibold text-xl">Most Mainstream Artist</h2>
                     <img src={mainstreamArtist.image} alt={mainstreamArtist.name} />
@@ -102,10 +104,10 @@ function Artists() {
                     <p>Popularity: {mainstreamArtist.count}</p>
                     <a href={mainstreamArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
-            )}
+            )} */}
 
             {/* most underrated song */}
-            { underratedArtist.name && (
+            {/* { underratedArtist.name && (
                 <div className="mb-5">
                     <h2 className="font-semibold text-xl">Most Underrated Artist</h2>
                     <img src={underratedArtist.image} alt={underratedArtist.name} />
@@ -123,7 +125,7 @@ function Artists() {
                     <p>Count: {mostFeaturedArtist.count}</p>
                     <a href={mostFeaturedArtist.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
-            )}
+            )} */}
 
         </div>
     );

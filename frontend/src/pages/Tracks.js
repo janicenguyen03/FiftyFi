@@ -107,7 +107,7 @@ function Tracks() {
 
             {/* most underrated song */}
             { underratedTrack.name && (
-                <div className="mb-5">
+                <div>
                     <h2 className="font-semibold text-xl">Most Underrated Track</h2>
                     <img src={underratedTrack.image} alt={underratedTrack.name} />
                     <p>{underratedTrack.name} - {underratedTrack.artists}</p>

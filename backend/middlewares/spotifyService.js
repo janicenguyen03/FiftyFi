@@ -101,9 +101,17 @@ export async function getTopItems(token, type) {
 };
 
 export async function getRecentlyPlayed(req, token) {
-    const currentTime = new Date();
+    const now = new Date();
+    
+    if (!token) {
+        return res.status(401).json({ error: "Unauthorized" });
+    }
+    const lastFetchedTimeDate = req.session.lastFetchedTime ? new Date(req.session.lastFetchedTime) : null;
 
-    if (req.session.cachedRecentPlayed && req.session.lastFetchedTime && (currentTime - req.session.lastFetchedTime) < 60 * 60 * 1000) {
+
+    if (req.session.cachedRecentPlayed && 
+        req.session.lastFetchedTime && 
+        (now - lastFetchedTimeDate) < 60 * 60 * 1000) {
         console.log("Returning cached recently played tracks");
         return req.session.cachedRecentPlayed;
     }
@@ -133,7 +141,7 @@ export async function getRecentlyPlayed(req, token) {
             allTracks,
         };
 
-        req.session.lastFetchedTime = currentTime;
+        req.session.lastFetchedTime = now;
         
         if (process.env.NODE_ENV !== "production") {
             console.log("----------------Before 12PM tracks:", before12PM.length);
