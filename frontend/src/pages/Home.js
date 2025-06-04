@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import Profile from "../components/Profile";
 import PlayTrack from "../components/PlayTrack";
 
@@ -11,8 +10,6 @@ function Home() {
 
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-
-  const [showAnimation, setShowAnimation] = useState(false);
 
   const [lastTrack, setLastTrack] = useState({});
   const [playlistFollowers, setPlaylistFollowers] = useState(0);
@@ -68,17 +65,7 @@ function Home() {
       );
   }, [BACKEND_URL]);
 
-  // Check if homepage is visited, if not load the framer motion
-  useEffect(() => {
-    const visited = localStorage.getItem("visitedHome");
-    if (!visited) {
-      setShowAnimation(true);
-      localStorage.setItem("visitedHome", "true");
-    }
-  }, []);
-
   const handleLogout = () => {
-    localStorage.removeItem("visitedHome");
     window.location.href = BACKEND_URL + "/logout";
   };
 
@@ -106,7 +93,7 @@ function Home() {
 
         {/* Stats */}
         <div className="flex-grow flex items-center justify-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl my-5 py-10 mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl lg:my-7 py-10 mx-auto">
             <PlayTrack track={lastTrack} />
             <div
               onClick={() => navigate("/tracks")}
@@ -131,7 +118,7 @@ function Home() {
       </div>
 
       {/* Footer */}
-      <div className="flex flex-col items-center justify-center mt-10 pt-20 lg:pt-0">
+      <div className="flex flex-col items-center justify-center mt-18 pt-20 lg:pt-0">
         <button className="btn" onClick={handleLogout}>
           Logout
         </button>

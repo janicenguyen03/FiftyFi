@@ -27,6 +27,6 @@ yarn-debug.log*
 yarn-error.log*
 
 /src/components/Card.js
-/src/components/Carousel.js
+# /src/components/Carousel.js
 /src/fetcher/TimeFetcher.js
 /src/fetcher/TrackFetcher.js

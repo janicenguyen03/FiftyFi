@@ -35,7 +35,7 @@ function PlayTrack({ track }) {
       {loading ? (
           <Spinner size="4" />
       ) : (
-        <div className="flex gap-4 lg:gap-6 items-center flex-row p-6 lg:p-10  mt-4">
+        <div className="flex gap-4 lg:gap-6 items-center flex-row px-6 py-10 lg:p-10 mt-4">
           <img
             src={track.image}
             alt={track.name}
