@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ArtistCard from "./ArtistCard";
+import TrackCard from "./TrackCard";
 
 export default function Carousel({ items, onFinish }) {
     const [index, setIndex] = useState(0);
@@ -26,9 +27,11 @@ export default function Carousel({ items, onFinish }) {
                 onRevealComplete={() => setCardRevealed(true)}
                 />;
         } 
-      // else if (item.type && item.type.includes("track")) {
-      //   return <TrackCard data={item.content} />;
-      // } else {
+        else if (item.type && item.type.includes("Track")) {
+            return <TrackCard data={item} 
+                onRevealComplete={() => setCardRevealed(true)} />;
+      } 
+      // else {
       //   return <TimeCard data={item.content} />;
       // }
     };

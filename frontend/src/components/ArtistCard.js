@@ -74,14 +74,14 @@ function ArtistCard({ data, onRevealComplete }) {
         </div>
         <div className="general">
             <div className="left">
-            {IMAGE && shown >= 1 && (
+            {IMAGE && (
                 <img
                 src={IMAGE}
                 alt={data.content.name}/>
             )}
             </div>
             <div className="content">
-                {infoItems.slice(1, shown + 1).map((item, i) => (
+                {infoItems.slice(1).map((item, i) => (
                 <div
                     key={item.key}
                 >
@@ -91,13 +91,11 @@ function ArtistCard({ data, onRevealComplete }) {
             </div>
         </div>
 
-        {shown >= infoItems.length && (
-            <div
-                className="click-to-reveal"
-            >
+        {/* {shown >= infoItems.length && ( */}
+            <div className="click-to-reveal">
             Click anywhere to reveal your next card
             </div>
-        )}
+        {/* )} */}
         </div>
     );
     }

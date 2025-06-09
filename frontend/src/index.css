@@ -135,7 +135,7 @@
     .analysis-card .title {
         @apply text-center text-2xl font-bold
         bg-neutral-950/60 w-full
-        p-3 rounded-t-xl rounded-b-lg
+        p-5 rounded-t-xl rounded-b-lg
     }
     .analysis-card .general {
         @apply flex flex-row w-full

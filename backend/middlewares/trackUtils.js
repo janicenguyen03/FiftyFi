@@ -3,7 +3,7 @@ function getTrackDetail(item, count, type) {
         return {
             id: item.track.id,
             name: item.track.name,
-            artists: item.track.artists.map(artist => artist.name).join(", "),
+            artists: item.track.artists,
             album: item.track.album.name,
             image: item.track.album.images[0]?.url,
             spotifyUrl: item.track.external_urls.spotify,
