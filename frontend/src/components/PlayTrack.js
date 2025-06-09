@@ -1,28 +1,28 @@
-import { useState, useEffect, useRef } from "react";
-import { ExternalLink, Play, Pause } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ExternalLink } from "lucide-react";
 import Spinner from "./Spinner";
 
 function PlayTrack({ track }) {
-  const audioRef = useRef(null);
+  // const audioRef = useRef(null);
   const [loading, setLoading] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false);
+  // const [isPlaying, setIsPlaying] = useState(false);
 
-  function togglePlay() {
-    const audio = audioRef.current;
-    if (!audio) return;
+  // function togglePlay() {
+  //   const audio = audioRef.current;
+  //   if (!audio) return;
     
-    if (audio.paused) {
-      audio.play();
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setIsPlaying(false);
-    }
+  //   if (audio.paused) {
+  //     audio.play();
+  //     setIsPlaying(true);
+  //   } else {
+  //     audio.pause();
+  //     setIsPlaying(false);
+  //   }
 
-    audio.onended = () => {
-      setIsPlaying(false);
-    };
-  }
+  //   audio.onended = () => {
+  //     setIsPlaying(false);
+  //   };
+  // }
 
   useEffect(() => {
     if (track) {
@@ -35,7 +35,7 @@ function PlayTrack({ track }) {
       {loading ? (
           <Spinner size="4" />
       ) : (
-        <div className="flex gap-4 lg:gap-6 items-center flex-row p-6 lg:p-10  mt-4">
+        <div className="flex gap-4 lg:gap-6 items-center flex-row px-6 py-10 lg:p-10 mt-4">
           <img
             src={track.image}
             alt={track.name}

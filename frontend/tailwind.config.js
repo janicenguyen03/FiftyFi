@@ -8,6 +8,10 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        tangerine: ["Tangerine", "cursive"],
+        ancizar: ["Ancizar", "sans-serif"],
+      },
       backgroundImage: {
         "custom-mesh-dark": 
         `radial-gradient(at 0% 100%, rgb(21, 128, 61) 0, transparent 46%),

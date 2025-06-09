@@ -39,7 +39,7 @@ function Profile({ user, playlistFollowers }) {
       </div>
       <img
         src={user.profilePicture}
-        alt="User profile picture"
+        alt="User profile"
         className="w-20 h-20 rounded-full object-cover ml-4"
       />
     </div>

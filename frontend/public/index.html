@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link id="favicon" rel="icon" href="./icon.png" />
+    <link id="favicon" id="favicon" rel="icon" href="./icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="FiftyFi"
@@ -15,13 +15,14 @@
     <div id="root"></div>
   </body>
   <script>
-    function setFaviconForTheme() {
-      const favicon = document.getElementById('favicon');
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      favicon.href = isDark ? '%PUBLIC_URL%/icon.png' : '%PUBLIC_URL%/light-theme-icon.png';
-    }
+  function setFaviconForTheme() {
+    const favicon = document.getElementById('favicon');
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    console.log(isDark);
+    favicon.href = isDark ? '%PUBLIC_URL%/icon.png' : '%PUBLIC_URL%/light-theme-icon.png';
+  }
 
-    setFaviconForTheme();
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setFaviconForTheme);
-  </script>
+  setFaviconForTheme();
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setFaviconForTheme);
+</script>
 </html>

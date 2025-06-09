@@ -18,7 +18,7 @@ export async function getTopTracks(req, res) {
         const formattedTracks = tracks.map(track => ({
             id: track.id,
             name: track.name,
-            artists: track.artists.map(artist => artist.name).join(", "),
+            artists: track.artists,
             album: track.album.name,
             image: track.album.images[0]?.url,
             spotifyUrl: track.external_urls.spotify,
