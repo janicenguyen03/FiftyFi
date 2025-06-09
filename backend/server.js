@@ -55,12 +55,10 @@ if (process.env.NODE_ENV === "production") {
   app.use(session(sessionOptions));
 }
 
-// app.use(session({sessionOptions}));
-
 const PORT = process.env.PORT || 5000;
 
 app.use((req, res, next) => {
-  console.log("Incoming request:", req.method, req.url);
+  console.log("Incoming request:", req.method);
   next();
 });
 
@@ -87,19 +85,3 @@ app.get("/api/check-session", (req,res) => {
 app.listen(PORT, () => {
   console.log(`Backend is running on port ${PORT}`);
 });
-
-{/* Top 6 songs
-  Top 6 artists
-  Tracks:
-    trend setter/ hidden gem seeker
-    recommend 1 song
-  Artists:
-    most repeated, skipped, lovehate
-    most featured
-    most mainstream, underrated
-    most likely to belong to
-    recommend 1 artist
-  Time:
-    time period with most activity
-    rec song in morning
-    rec song at night */}

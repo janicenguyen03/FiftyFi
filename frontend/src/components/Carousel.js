@@ -34,7 +34,7 @@ export default function Carousel({ items, onFinish }) {
     };
 
     return (
-        <div className="back-side-decor" onClick={next}>
+        <div onClick={next}>
             {renderCard(items[index])}
         </div>
     );

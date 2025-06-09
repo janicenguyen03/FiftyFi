@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import ArtistFetcher from "../fetcher/ArtistFetcher";
 import { House } from "lucide-react";
-// import { motion } from "framer-motion";
 
 function Artists() {
     const navigate = useNavigate();

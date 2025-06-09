@@ -1,16 +1,6 @@
-// tFeaturedArtist = {
-        //     id: mostFeaturedArtistID,
-        //     name: mostFeaturedArtist?.name,
-        //     image: mostFeaturedArtist?.images[0]?.url,
-        //     spotifyUrl: mostFeaturedArtist?.external_urls.spotify,
-        //     genres: mostFeaturedArtist?.genres,
-        //     count,
-        //     type: "featured",
-        // }
-
 import { useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+// import { motion, AnimatePresence } from "framer-motion";
 
 function ArtistCard({ data, onRevealComplete }) {
     const PLACEHOLDER_IMAGE = process.env.PUBLIC_URL + "/Portrait.png";
@@ -48,15 +38,17 @@ function ArtistCard({ data, onRevealComplete }) {
         { key: "count", render: () => {
             if (data.content.count !== undefined && data.content.count !== null) {
             if (data.type === "Most Repeated Artist") {
-                return <div>In last 50 tracks, you have repeated this artist <span className="font-bold">{data.content.count}</span> times.</div>;
+                return <div>In last 50 tracks, you have repeated this artist <span className="font-bold">{data.content.count} time(s).</span></div>;
             } else if (data.type === "Most Skipped Artist") {
-                return <div>In last 50 tracks, you have skipped this artist <span className="font-bold">{data.content.count}</span> times.</div>;
+                return <div>In last 50 tracks, you have skipped this artist <span className="font-bold">{data.content.count} time(s).</span></div>;
+            } else if (data.type === 'Love Hate Artist') {
+                return
             } else if (data.type === 'Most Featured Artist') {
-                return <div>In last 50 tracks, this artist has been featured in your playlists <span className="font-bold">{data.content.count}</span> times.</div>;
+                return <div>In last 50 tracks, this artist has been featured in your playlists <span className="font-bold">{data.content.count} time(s).</span></div>;
             } else if (data.type === 'Most Mainstream Artist') {
-                return <div>Popularity: {data.content.count}</div>
+                return <div><span className="font-bold">Popularity:</span> {data.content.count}</div>
             } else if (data.type === 'Most Underrated Artist') {
-                return <div>Popularity: {data.content.count}</div>;
+                return <div><span className="font-bold">Popularity:</span> {data.content.count}</div>;
             }
             return <div>Count: {data.content.count}</div>;
             }
@@ -80,43 +72,31 @@ function ArtistCard({ data, onRevealComplete }) {
         <div className="title">
             <h1>{data.type}</h1>
         </div>
-        <div className="general flex">
+        <div className="general">
             <div className="left">
             {IMAGE && shown >= 1 && (
-                <motion.img
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
+                <img
                 src={IMAGE}
-                alt={data.content.name}
-                />
+                alt={data.content.name}/>
             )}
             </div>
-            <div className="content space-y-3">
-            <AnimatePresence>
+            <div className="content">
                 {infoItems.slice(1, shown + 1).map((item, i) => (
-                <motion.div
+                <div
                     key={item.key}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ delay: 0.1 * i }}
                 >
                     {item.render()}
-                </motion.div>
+                </div>
                 ))}
-            </AnimatePresence>
             </div>
         </div>
 
         {shown >= infoItems.length && (
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-sm text-right text-neutral-300 italic"
+            <div
+                className="click-to-reveal"
             >
             Click anywhere to reveal your next card
-            </motion.div>
+            </div>
         )}
         </div>
     );
