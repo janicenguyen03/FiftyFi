@@ -102,11 +102,11 @@ function TrackCard({ data, onRevealComplete }) {
             </div>
         </div>
 
-        {shown >= infoItems.length && (
+        {/* {shown >= infoItems.length && ( */}
             <div className="click-to-reveal">
                 Click anywhere to reveal your next card
             </div>
-        )}
+        {/* )} */}
         </div>
     );
     }
