@@ -91,7 +91,7 @@ function Time() {
                 <div className="time-card">
                     <h2>Most Repeated Track Before 12PM</h2>
                     <p>{mostRepeatedBefore.name}</p>
-                    <p>{mostRepeatedBefore.artists}</p>
+                    <p>{mostRepeatedBefore.artists.map(artist => artist.name).join(", ")}</p>
                     <a href={mostRepeatedBefore.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>    
             )}
@@ -99,7 +99,7 @@ function Time() {
                 <div className="time-card">
                     <h2>Most Repeated Track After 12PM</h2>
                     <p>{mostRepeatedAfter.name}</p>
-                    <p>{mostRepeatedAfter.artists}</p>
+                    <p>{mostRepeatedAfter.artists.map(artist => artist.name).join(", ")}</p>
                     <a href={mostRepeatedAfter.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>    
             )}
@@ -107,7 +107,7 @@ function Time() {
                 <div className="time-card">
                     <h2>Most Skipped Track Before 12PM</h2>
                     <p>{mostSkippedBefore.name}</p>
-                    <p>{mostSkippedBefore.artists}</p>
+                    <p>{mostSkippedBefore.artists.map(artist => artist.name).join(", ")}</p>
                     <a href={mostSkippedBefore.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>    
             )}
@@ -115,7 +115,7 @@ function Time() {
                 <div className="time-card">
                     <h2>Most Skipped Track After 12PM</h2>
                     <p>{mostSkippedAfter.name}</p>
-                    <p>{mostSkippedAfter.artists}</p>
+                    <p>{mostSkippedAfter.artists.map(artist => artist.name).join(", ")}</p>
                     <a href={mostSkippedAfter.spotifyUrl} target="_blank" rel="noopener noreferrer">🔗 Listen on Spotify</a>
                 </div>
             )}

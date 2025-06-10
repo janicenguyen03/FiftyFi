@@ -3,7 +3,7 @@
 FiftyFi is a music analytics tool that helps you gain insights into your listening habits by tracking your last 50 played tracks and analyzing your top items from the past month.
 
 - **Live Frontend:** https://fiftyfi.vercel.app/ (Deployed with Vercel)
-- **Live Backend:** https://fiftyfi.up.railway.app/login (Deployed with Railway)
+- **Live Backend:** https://fiftyfi.onrender.com (Deployed with Render)
 
 ## Categories:
 
@@ -40,12 +40,15 @@ To provide these insights, FiftyFi requests the following Spotify API scopes:
 - `playlist-read-private`
 - `playlist-read-collaborative`
 
-## Getting Started
+## Getting Started locally
 
 1. Clone the repository.
 2. Set up your Spotify API credentials.
-3. Run npm i
-4. Run the app and connect your Spotify account.
+3. Run npm i in frontend folder
+4. Run npm i in backend folder
+5. Run the frontend app with npm start
+6. Run the backend app with node/nodemon server.js
+7. Connect your Spotify account.
 
 ## License
 
