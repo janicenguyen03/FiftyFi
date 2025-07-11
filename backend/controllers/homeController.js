@@ -47,13 +47,6 @@ export async function getPlaylistFollowers(req, res) {
   const now = new Date();
   const lastFetchedTimeDate = req.session.lastFetchedTime ? new Date(req.session.lastFetchedTime) : null;
 
-  if (process.env.NODE_ENV !== "production" && req.session.playlistSaveCounts) {
-    console.log("Playlist followers count:", req.session.playlistSaveCounts);
-  }
-  if (process.env.NODE_ENV !== "production" && req.session.lastFetchedTime) {
-    console.log("Last fetched time:", req.session.lastFetchedTime);
-  }
-
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
   };
@@ -81,7 +74,6 @@ export async function getPlaylistFollowers(req, res) {
 
     let followers = 0;
     for (const playlist of filteredPlaylists) {
-      console.log("Playlist:", playlist.name);
       const playlistId = playlist.id;
       const url = `${API_BASE_URL}/playlists/${playlistId}`;
       const res = await axios.get(url, { headers });
@@ -92,11 +84,6 @@ export async function getPlaylistFollowers(req, res) {
     
     req.session.lastFetchedTime = now.toISOString();
     req.session.playlistSaveCounts = followers;
-    if (process.env.NODE_ENV !== "production") {
-      console.log("Total followers:", req.session.playlistSaveCounts);
-      console.log("Last fetched time:", req.session.lastFetchedTime);
-    };
-    
 
     return res.json(req.session.playlistSaveCounts);
   } catch (error) {

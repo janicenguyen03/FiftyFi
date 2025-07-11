@@ -25,8 +25,7 @@ function TrackCard({ data, onRevealComplete }) {
     const infoItems = [
         { key: "image", render: () => (
         <div className="left">
-            <img src={IMAGE}
-             alt={data.content.name} />
+            <img src={IMAGE} alt={data.content.name} />
         </div>
         ) },
         { key: "name", render: () => (
@@ -34,7 +33,7 @@ function TrackCard({ data, onRevealComplete }) {
             <h2>{data.content.name}</h2>
             <div className="relative group">
             <a href={data.content.spotifyUrl} target="_blank" rel="noopener noreferrer">
-                <ExternalLink size={16} className="text-neutral-400 hover:text-white transition" />
+                <ExternalLink size={16} className="external-link" />
             </a>
             <div className="tooltip bottom-full">Open in Spotify</div>
             </div>
@@ -52,19 +51,27 @@ function TrackCard({ data, onRevealComplete }) {
         )},
         { key: "count", render: () => {
             if (data.content.count !== undefined && data.content.count !== null) {
-            if (data.type === "Most Repeated Track") {
-                return <div>In last 50 tracks, you have repeated this track <span className="font-bold">{data.content.count} time(s).</span></div>;
-            } else if (data.type === "Most Skipped Track") {
-                return <div>In last 50 tracks, you have skipped this track <span className="font-bold">{data.content.count} time(s).</span></div>;
-            } else if (data.type === 'Love Hate Track') {
-                return
-            }  else if (data.type === 'Most Mainstream Track') {
-                return <div><span className="font-bold">Popularity:</span> {data.content.count}</div>
-            } else if (data.type === 'Most Underrated Track') {
-                return <div><span className="font-bold">Popularity:</span> {data.content.count}</div>;
-            }
-            return <div>Count: {data.content.count}</div>;
-            }
+                if (data.type === "Most Repeated Track") {
+                    return <div>In last 50 tracks, you have repeated this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                } else if (data.type === "Most Skipped Track") {
+                    return <div>In last 50 tracks, you have skipped this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                } else if (data.type === "Love Hate Track") {
+                    return
+                }  else if (data.type === "Most Mainstream Track") {
+                    return <div><span className="font-bold">Popularity:</span> {data.content.count}</div>
+                } else if (data.type === "Most Underrated Track") {
+                    return <div><span className="font-bold">Popularity:</span> {data.content.count}</div>;
+                } else if (data.type === "Most Repeated Track After 12PM") {
+                    return <div>During this time, you have repeated this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                } else if (data.type === "Most Skipped Track After 12PM") {
+                    return <div>During this time, you have skipped this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                } else if (data.type === "Most Repeated Track Before 12PM") {
+                    return <div>During this time, you have repeated this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                } else if (data.type === "Most Skipped Track Before 12PM") {
+                    return <div>During this time, you have skipped this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                } 
+                return <div>Count: {data.content.count}</div>;
+                }
             return null;
         }},
     ];
@@ -82,31 +89,34 @@ function TrackCard({ data, onRevealComplete }) {
 
     return (
         <div className="analysis-card">
-        <div className="title">
-            <h1>{data.type}</h1>
-        </div>
-        <div className="general">
-            <div className="left">
-            {IMAGE && (
-                <img
-                src={IMAGE}
-                alt={data.content.name}/>
-            )}
+            <div className="title">
+                <h1>{data.type}</h1>
             </div>
-            <div className="content">
-                {infoItems.slice(1).map((item, i) => (
-                <div key={item.key}>
-                    {item.render()}
+            <div className="general">
+                <div className="left">
+                {IMAGE && (
+                    <img src={IMAGE}
+                    alt={data.content.name}/>
+                )}
                 </div>
-                ))}
+                <div className="content">
+                    {infoItems.slice(1).map((item, i) => (
+                    <div key={item.key}>
+                        {item.render()}
+                    </div>
+                    ))}
+                </div>
             </div>
-        </div>
 
-        {/* {shown >= infoItems.length && ( */}
-            <div className="click-to-reveal">
-                Click anywhere to reveal your next card
-            </div>
-        {/* )} */}
+            {data.type === "Most Underrated Track" ? (
+                <div className="click-to-reveal">
+                    Click anywhere within the card to return home
+                </div>
+            ) : (
+                <div className="click-to-reveal">
+                    Click anywhere within the card to reveal your next card
+                </div>
+            )}
         </div>
     );
     }

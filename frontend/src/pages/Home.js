@@ -95,22 +95,16 @@ function Home() {
         <div className="flex-grow flex items-center justify-center">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl lg:my-7 py-10 mx-auto">
             <PlayTrack track={lastTrack} />
-            <div
-              onClick={() => navigate("/tracks")}
-              className="home-card home-card-btn"
-            >
+            <div onClick={() => navigate("/tracks")}
+              className="home-card home-card-btn">
               Trackify
             </div>
-            <div
-              onClick={() => navigate("/time")}
-              className="home-card home-card-btn"
-            >
+            <div onClick={() => navigate("/time")}
+              className="home-card home-card-btn">
               Timify
             </div>
-            <div
-              onClick={() => navigate("/artists")}
-              className="home-card home-card-btn"
-            >
+            <div onClick={() => navigate("/artists")}
+              className="home-card home-card-btn">
               Artify
             </div>
           </div>
@@ -118,7 +112,7 @@ function Home() {
       </div>
 
       {/* Footer */}
-      <div className="flex flex-col items-center justify-center mt-18 pt-20 lg:pt-0">
+      <div className="flex flex-col items-center justify-center mt-18 pt-36 lg:pt-0">
         <button className="btn" onClick={handleLogout}>
           Logout
         </button>

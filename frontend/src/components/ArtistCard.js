@@ -3,6 +3,7 @@ import { ExternalLink } from "lucide-react";
 // import { motion, AnimatePresence } from "framer-motion";
 
 function ArtistCard({ data, onRevealComplete }) {
+
     const PLACEHOLDER_IMAGE = process.env.PUBLIC_URL + "/Portrait.png";
 
     const IMAGE = data.content.image ? data.content.image : PLACEHOLDER_IMAGE;
@@ -18,7 +19,7 @@ function ArtistCard({ data, onRevealComplete }) {
             <h2>{data.content.name}</h2>
             <div className="relative group">
             <a href={data.content.spotifyUrl} target="_blank" rel="noopener noreferrer">
-                <ExternalLink size={16} className="text-neutral-400 hover:text-white transition" />
+                <ExternalLink size={16} className="external-link" />
             </a>
             <div className="tooltip bottom-full">Open in Spotify</div>
             </div>
@@ -69,33 +70,36 @@ function ArtistCard({ data, onRevealComplete }) {
 
     return (
         <div className="analysis-card">
-        <div className="title">
-            <h1>{data.type}</h1>
-        </div>
-        <div className="general">
-            <div className="left">
-            {IMAGE && (
-                <img
-                src={IMAGE}
-                alt={data.content.name}/>
-            )}
+            <div className="title">
+                <h1>{data.type}</h1>
             </div>
-            <div className="content">
-                {infoItems.slice(1).map((item, i) => (
-                <div
-                    key={item.key}
-                >
-                    {item.render()}
+            <div className="general">
+                <div className="left">
+                    {IMAGE && (
+                        <img
+                            src={IMAGE}
+                            alt={data.content.name}
+                        />
+                    )}
                 </div>
-                ))}
+                <div className="content">
+                    {infoItems.slice(1).map((item, i) => (
+                        <div key={item.key}>
+                            {item.render()}
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
 
-        {/* {shown >= infoItems.length && ( */}
-            <div className="click-to-reveal">
-            Click anywhere to reveal your next card
-            </div>
-        {/* )} */}
+            {data.type === "Most Underrated Artist" ? (
+                <div className="click-to-reveal">
+                    Click anywhere within the card to return home
+                </div>
+            ) : (
+                <div className="click-to-reveal">
+                    Click anywhere within the card to reveal your next card
+                </div>
+            )}
         </div>
     );
     }

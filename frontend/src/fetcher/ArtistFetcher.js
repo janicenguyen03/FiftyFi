@@ -37,7 +37,6 @@ function ArtistFetcher() {
             setLoveHateArtist(data.loveHateArtist || {});
             setMainstreamArtist(data.mainstreamArtist || {});
             setUnderratedTrack(data.underratedArtist || {});
-            console.log("Artist insights fetched successfully:", data);
         })
         .catch(err => console.error('Error fetching artists insights:', err));
     }, [BACKEND_URL]);

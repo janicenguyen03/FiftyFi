@@ -15,7 +15,7 @@
 
     /* General */
     .background {
-        @apply bg-dark-base bg-custom-mesh-dark
+        @apply bg-dark-base bg-custom-mesh-dark min-h-screen h-full
     }
 
     .btn {
@@ -32,6 +32,9 @@
         };
     }
 
+    .external-link {
+        @apply text-neutral-400 hover:text-white transition
+    }
     .tooltip {
         @apply absolute mt-2 hidden
         group-hover:block bg-gray-700 text-white text-xs
@@ -54,18 +57,22 @@
 
     }
     .home-card {
-        @apply rounded-3xl bg-black/60 border-2 border-neutral-300/20;
+        @apply rounded-3xl bg-black/60 border-2 border-neutral-300/20
     }
 
-    .time-card {
-        @apply bg-neutral-900/50 border-2 border-neutral-300/20
-        rounded-lg shadow-lg shadow-emerald-900/30
-        p-5 mx-10 min-w-[700px] max-w-[900px]
-        transition duration-300 ease-in-out;
-        &:hover {
-            @apply bg-neutral-900/70 border-neutral-300/30
-            shadow-lg shadow-emerald-900/50;
-        }
+    /* Home Track Card */
+    .play-track-card {
+        @apply  shadow-inner shadow-green-200/30 place-items-center justify-center flex
+    }
+
+    .play-track-card img {
+        @apply w-1/4 rounded mx-3;
+    }
+    .play-track-card .general {
+        @apply flex gap-4 lg:gap-6 place-items-center flex-row px-6 py-8 lg:p-10;
+    }
+    .play-track-card h2 {
+        @apply lg:text-lg font-semibold lg:font-bold;
     }
 
     /* main category */
@@ -127,15 +134,13 @@
     
     /* Analysis Card */
     .analysis-card {
-        @apply  flex-col
-        flex items-center justify-center
+        @apply  flex-col flex cursor-pointer
         border-2 border-neutral-300/20 bg-emerald-900/70
-        rounded-lg lg:min-h-[400px] min-h-[330px]
+        rounded-lg lg:min-h-[430px] min-h-[350px]
     }
     .analysis-card .title {
         @apply text-center text-2xl font-bold
-        bg-neutral-950/60 w-full
-        p-5 rounded-t-xl rounded-b-lg
+        bg-neutral-950/60 w-full p-5 rounded-lg
     }
     .analysis-card .general {
         @apply flex flex-row w-full
@@ -148,13 +153,33 @@
         aspect-square object-cover min-w-full
     }
     .analysis-card .content {
-        @apply flex flex-col justify-center space-y-2 ml-4
+        @apply flex flex-col justify-center gap-2 ml-4 mb-3
     }
     .content h2 {
-        @apply text-2xl font-semibold italic font-ancizar
+        @apply text-xl lg:text-2xl font-semibold italic font-ancizar
     }
     .click-to-reveal {
         @apply absolute bottom-1 right-3 text-sm text-neutral-300 italic
+    }
+
+    /* Time Card */
+    .time-card {
+        @apply border-2 border-neutral-300/20 bg-emerald-900/70
+        rounded-lg lg:min-h-[430px] min-h-[350px] cursor-pointer
+    }
+    .time-card .title {
+        @apply text-center text-2xl font-bold
+        bg-neutral-950/60 w-full p-5 rounded-lg
+    }
+    .time-card .general {
+        @apply w-full flex flex-row place-items-center justify-center p-10 flex-1
+    }
+    .time-card .num {
+        @apply w-1/3 h-full lg:w-1/4 md:text-8xl md:scale-y-[200%]
+        lg:text-9xl lg:scale-y-[160%] lg:ml-5 font-extrabold
+    }
+    .time-card .content {
+        @apply ml-10 items-center self-center md:text-lg
     }
 
 }

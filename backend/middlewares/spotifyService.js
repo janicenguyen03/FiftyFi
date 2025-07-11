@@ -142,12 +142,6 @@ export async function getRecentlyPlayed(req, token) {
         };
 
         req.session.lastFetchedTime = now;
-        
-        if (process.env.NODE_ENV !== "production") {
-            console.log("----------------Before 12PM tracks:", before12PM.length);
-            console.log("----------------After 12PM tracks:", after12PM.length);
-            console.log("----------------All tracks:", allTracks.length);
-        };
         return req.session.cachedRecentPlayed;
     } catch (error) {
         console.error("Error fetching recently played tracks:", error.message);

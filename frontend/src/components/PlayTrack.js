@@ -31,28 +31,16 @@ function PlayTrack({ track }) {
   }, [track]);
 
   return (
-    <div className="home-card shadow-inner shadow-green-200/30">
-      {loading ? (
-          <Spinner size="4" />
-      ) : (
-        <div className="flex gap-4 lg:gap-6 items-center flex-row px-6 py-10 lg:p-10 mt-4">
-          <img
-            src={track.image}
-            alt={track.name}
-            className="w-24 h-24 rounded mx-3"
-          />
-          <div className="flex flex-col my-3">
+    <div className="home-card play-track-card">
+      {loading ? (<Spinner size="4"/>) : (
+        <div className="general">
+          <img src={track.image} alt={track.name}/>
+          <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <h2 className="text-md lg:text-lg font-semibold lg:font-bold">
-                {track.name}
-              </h2>
+              <h2>{track.name}</h2>
               <div className="relative group">
-                <a href={track.spotifyUrl}
-                  target="_blank" rel="noopener noreferrer"
-                >
-                  <ExternalLink size={16}
-                    className="text-neutral-400 hover:text-white transition"
-                  />
+                <a href={track.spotifyUrl} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink size={16} className="external-link" />
                 </a>
                 <div className="tooltip bottom-full">Open in Spotify</div>
               </div>
