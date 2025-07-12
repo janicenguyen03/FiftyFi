@@ -41,6 +41,7 @@ if (process.env.NODE_ENV === "production") {
 
   app.use(session({
     ...sessionOptions,
+    name: '__Host-sid',
     cookie: { 
       maxAge: 24 * 60 * 60 * 1000,
       secure: true, 
