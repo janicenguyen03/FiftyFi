@@ -11,6 +11,8 @@ module.exports = {
       fontFamily: {
         tangerine: ["Tangerine", "cursive"],
         ancizar: ["Ancizar", "sans-serif"],
+        digital: ["Digital Numbers", "sans-serif"],
+        space: ["Space Mono", "monospace"],
       },
       backgroundImage: {
         "custom-mesh-dark": 

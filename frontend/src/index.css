@@ -5,6 +5,8 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&display=swap');
+@import url('https://fonts.cdnfonts.com/css/digital-numbers');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 @layer components {
     /* Login Page */
@@ -136,7 +138,7 @@
     .analysis-card {
         @apply  flex-col flex cursor-pointer
         border-2 border-neutral-300/20 bg-emerald-900/70
-        rounded-lg lg:min-h-[430px] min-h-[350px]
+        rounded-lg lg:min-h-[430px] min-h-[340px]
     }
     .analysis-card .title {
         @apply text-center text-2xl font-bold
@@ -165,7 +167,7 @@
     /* Time Card */
     .time-card {
         @apply border-2 border-neutral-300/20 bg-emerald-900/70
-        rounded-lg lg:min-h-[430px] min-h-[350px] cursor-pointer
+        rounded-lg lg:min-h-[430px] min-h-[340px] cursor-pointer
     }
     .time-card .title {
         @apply text-center text-2xl font-bold
@@ -180,6 +182,13 @@
     }
     .time-card .content {
         @apply ml-10 items-center self-center md:text-lg
+    }
+
+    .time-card .exact-time {
+        @apply text-center md:text-lg flex flex-col p-3 lg:p-10
+    }
+    .time-card .digital-num {
+        @apply font-digital text-2xl lg:text-4xl mt-5 flex flex-col gap-y-4
     }
 
 }

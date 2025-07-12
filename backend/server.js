@@ -45,7 +45,8 @@ if (process.env.NODE_ENV === "production") {
       maxAge: 24 * 60 * 60 * 1000,
       secure: true, 
       sameSite: "none",
-      httpOnly: true },
+      httpOnly: true,
+      partitioned: true },
     store: new RedisStore({ 
       client: redisClient,
       prefix: 'session:',
@@ -70,7 +71,7 @@ app.use('/api/time-spent', timeRoutes);
 app.use('/api/artist', artistRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Fiftyfi backend is running!");
+  res.send("FiftyFi backend is running!");
 });
 
 app.get("/api/test", (req, res) => {
