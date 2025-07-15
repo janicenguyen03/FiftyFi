@@ -1,6 +1,9 @@
 import axios from "axios";
+import redisClient from "../middlewares/redisClient.js";
 
 const API_BASE_URL = "https://api.spotify.com/v1";
+const recentlyPlayedCache = {};
+const CACHE_TTL = 60 * 60 * 1000;
 
 function splitTracksByTime(recentlyPlayed) {
     const before12PM = [];
@@ -10,11 +13,8 @@ function splitTracksByTime(recentlyPlayed) {
         const playedAt = new Date(track.played_at);
         const hours = playedAt.getHours();
 
-        if (hours >= 0 && hours < 12) {
-            before12PM.push(track);
-        } else {
-            after12PM.push(track);
-        }
+        if (hours >= 0 && hours < 12) {before12PM.push(track);
+        } else {after12PM.push(track)};
     });
 
     return { before12PM, after12PM };
@@ -58,6 +58,16 @@ function cleanRecentlyPlayed(recentlyPlayed) {
     return cleaned;
 }
 
+export async function getSpotifyToken(req) {
+    const userId = req.user?.id;
+    if (!userId) {throw new Error("User ID not found in request")}
+
+    const spotifyToken = await redisClient.get(`spotify:${userId}`);
+    if (!spotifyToken) {throw new Error("Spotify token not found")};
+
+    return {userId, spotifyToken};
+}
+
 export async function getArtistInfo(token, artistIds) {
     const allArtists = [];
     const chunkSize = 50;
@@ -72,11 +82,7 @@ export async function getArtistInfo(token, artistIds) {
         const url = `${API_BASE_URL}/artists?ids=${idsParam}`;
 
         try {
-            const response = await axios.get(url, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await axios.get(url, {headers: {Authorization: `Bearer ${token}`}});
             allArtists.push(...response.data.artists);
         } catch (error) {
             console.error("Failed to fetch artist chunk:", error.message);
@@ -89,9 +95,7 @@ export async function getTopItems(token, type) {
     const url = `${API_BASE_URL}/me/top/${type}?limit=6&time_range=short_term`;
     try {
         const response = await axios.get(url, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            headers: {Authorization: `Bearer ${token}`},
         });
         return response.data.items;
     } catch (error) {
@@ -100,49 +104,33 @@ export async function getTopItems(token, type) {
     }
 };
 
-export async function getRecentlyPlayed(req, token) {
+export async function getRecentlyPlayed(userId, spotifyToken) {
     const now = new Date();
-    
-    if (!token) {
-        return res.status(401).json({ error: "Unauthorized" });
-    }
-    const lastFetchedTimeDate = req.session.lastFetchedTime ? new Date(req.session.lastFetchedTime) : null;
 
-
-    if (req.session.cachedRecentPlayed && 
-        req.session.lastFetchedTime && 
-        (now - lastFetchedTimeDate) < 60 * 60 * 1000) {
+    const cacheEntry = recentlyPlayedCache[userId];
+    if (cacheEntry && (now - cacheEntry.timestamp < CACHE_TTL)) {
         console.log("Returning cached recently played tracks");
-        return req.session.cachedRecentPlayed;
+        return cacheEntry.data;
     }
     
     console.log("Fetching recently played tracks from Spotify API");
-
     let allTracks = [];
-
     try {
         const url = `${API_BASE_URL}/me/player/recently-played?limit=50`;
-        const response = await axios.get(url, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        allTracks = response.data.items;        
-       
+        const response = await axios.get(url, {headers: {Authorization: `Bearer ${spotifyToken}`}});
+
+        allTracks = response.data.items;
+
         let { before12PM, after12PM } = splitTracksByTime(allTracks);
 
         allTracks = cleanRecentlyPlayed(allTracks);
         before12PM = cleanRecentlyPlayed(before12PM);
         after12PM = cleanRecentlyPlayed(after12PM);
 
-        req.session.cachedRecentPlayed = {
-            before12PM,
-            after12PM,
-            allTracks,
-        };
+        const data = {before12PM, after12PM, allTracks};
+        recentlyPlayedCache[userId] = {data, timestamp: now};
 
-        req.session.lastFetchedTime = now;
-        return req.session.cachedRecentPlayed;
+        return data;
     } catch (error) {
         console.error("Error fetching recently played tracks:", error.message);
         throw error;

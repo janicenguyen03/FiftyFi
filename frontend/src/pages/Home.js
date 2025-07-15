@@ -55,7 +55,7 @@ function Home() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setPlaylistFollowers(data || 0);
+        setPlaylistFollowers(data.followers || 0);
         if (!process.env.NODE_ENV) {
           console.log("Playlist followers count:", data);
         }
@@ -65,8 +65,15 @@ function Home() {
       );
   }, [BACKEND_URL]);
 
-  const handleLogout = () => {
-    window.location.href = BACKEND_URL + "/logout";
+  // Handle Logout
+  async function handleLogout() {
+    try {
+      await axios.post(`${BACKEND_URL}/logout`, {}, { withCredentials: true });
+      setUser(null);
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   if (loading) {

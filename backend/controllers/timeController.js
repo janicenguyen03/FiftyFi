@@ -1,4 +1,4 @@
-import { getRecentlyPlayed } from "../middlewares/spotifyService.js";
+import { getRecentlyPlayed, getSpotifyToken } from "../middlewares/spotifyService.js";
 import { getRepeatedSkipped, getMostRepeatedOrSkipped } from "../middlewares/trackUtils.js";
 
 let before12PM = [];
@@ -49,9 +49,16 @@ function countTime(totalMs, time) {
 const getTrackID = (item) => item.track.id;
 
 export async function getTimeInsights(req, res) {
+    const token = req.cookies.token;
+    if (!token) {return res.status(401).json({ error: "Unauthorized" })};
+
+    const {userId, spotifyToken} = await getSpotifyToken(req);
+    if (!spotifyToken) {
+        return res.status(401).json({ error: "Spotify token expired" });
+    }
+
     try {
-        const token = req.session.access_token;
-        const recentlyPlayed = await getRecentlyPlayed(req, token);
+        const recentlyPlayed = await getRecentlyPlayed(userId, spotifyToken);
 
         before12PM = recentlyPlayed.before12PM || [];
         after12PM = recentlyPlayed.after12PM || [];

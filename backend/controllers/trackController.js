@@ -1,16 +1,17 @@
 import { getLoveHateTrack, getRepeatedSkipped, getMostRepeatedOrSkipped, getMainstreamUnderrated } from "../middlewares/trackUtils.js";
-import { getTopItems, getRecentlyPlayed } from "../middlewares/spotifyService.js";
+import { getTopItems, getRecentlyPlayed, getSpotifyToken } from "../middlewares/spotifyService.js";
 
 export async function getTopTracks(req, res) {
-    
-    const token = req.session.access_token;
+    const token = req.cookies.token;
+    if (!token) {return res.status(401).json({ error: "Get Top Tracks Token Unauthorized" })};
 
-    if (!token) {
-        return res.status(401).json({ error: "Unauthorized" });
+    const {userId, spotifyToken} = await getSpotifyToken(req);
+    if (!spotifyToken) {
+        return res.status(401).json({ error: "Get Top Tracks Spotify Token Unauthorized" });
     }
 
     try {
-        const tracks = await getTopItems(token, 'tracks');
+        const tracks = await getTopItems(spotifyToken, 'tracks');
 
         if (!tracks || tracks.length === 0) {
             return res.status(404).json({ error: "No tracks found" });
@@ -36,14 +37,16 @@ export async function getTopTracks(req, res) {
 const getTrackID = (item) => item.track.id;
   
 export async function getTrackInsights(req, res) {
-    const token = req.session.access_token;
+    const token = req.cookies.token;
+    if (!token) {return res.status(401).json({ error: "Get Track Insights Token Unauthorized" })};
 
-    if (!token) {
-        return res.status(401).json({ error: "Get Track Insights Unauthorized" });
+    const {userId, spotifyToken} = await getSpotifyToken(req);
+    if (!spotifyToken) {
+        return res.status(401).json({ error: "Get Track Insights Spotify Token Unauthorized" });
     }
 
     try {
-        const recentlyPlayed = await getRecentlyPlayed(req, token);
+        const recentlyPlayed = await getRecentlyPlayed(userId, spotifyToken);
         const allTracks = recentlyPlayed.allTracks;
 
         const {repeatedTracks, skippedTracks} = getRepeatedSkipped(allTracks, getTrackID);

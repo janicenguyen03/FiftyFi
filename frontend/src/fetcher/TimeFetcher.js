@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import Carousel from "../components/Carousel";
 import { motion } from "framer-motion";
 
@@ -22,9 +23,9 @@ function TimeFetcher() {
     const [ showInsights, setShowInsights ] = useState(false);
 
     useEffect(() => {
-        fetch(BACKEND_URL + "/api/time-spent", {credentials: "include"})
-        .then((response) => response.json())
-        .then((data) => {
+        axios.get(BACKEND_URL + "/api/time-spent", { withCredentials: true })
+        .then((response) => {
+            const data = response.data;
             setPartOfDayBefore(data.percentage.before12PM || 0);
             setPartOfDayAfter(data.percentage.after12PM || 0);
             setPartOfDay(data.percentage.allTracks || 0);

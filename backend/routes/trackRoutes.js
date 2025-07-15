@@ -1,10 +1,10 @@
 import express from 'express';
 import { getTopTracks, getTrackInsights } from '../controllers/trackController.js';
-import isAuthenticated from '../middlewares/authMiddleware.js';
+import jwtAuth from '../middlewares/jwtAuth.js';
 
 const router = express.Router();
 
-router.use(isAuthenticated);
+router.use(jwtAuth);
 
 router.get('/top', getTopTracks);
 router.get('/insights', getTrackInsights);

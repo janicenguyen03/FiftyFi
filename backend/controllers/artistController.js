@@ -1,25 +1,18 @@
 import { getMainstreamUnderrated, getRepeatedSkipped, getMostRepeatedOrSkipped, getLoveHateArtist, getMostFeaturedArtistID } from "../middlewares/artistUtils.js";
-import { getTopItems, getRecentlyPlayed, getArtistInfo } from "../middlewares/spotifyService.js";
-
-//  Artists:
-// most repeated, skipped, lovehate
-// most featured
-// most mainstream, underrated
-// most likely to belong to
-// recommend 1 artist
+import { getTopItems, getRecentlyPlayed, getArtistInfo, getSpotifyToken } from "../middlewares/spotifyService.js";
 
 export async function getTopArtists(req, res) {
-    
-    const token = req.session.access_token;
-
-    if (!token) {
-        return res.status(401).json({ error: "Unauthorized" });
+    const token = req.cookies.token;
+    if (!token) {return res.status(401).json({ error: "Get Top Artists Token Unauthorized" })};
+    const {userId, spotifyToken} = await getSpotifyToken(req);
+    if (!spotifyToken) {
+        return res.status(401).json({ error: "Get Top Artists Spotify Token Unauthorized" });
     }
 
     try {
-        const artists = await getTopItems(token, 'artists');
+        const artists = await getTopItems(spotifyToken, 'artists');
         if (!artists || artists.length === 0) {
-            return res.status(404).json({ error: "No tracks found" });
+            return res.status(404).json({ error: "No artists found" });
         };
 
         const formattedArtists = artists.map(item => ({
@@ -55,17 +48,19 @@ function getArtistID(item) {
 };
 
 export async function getArtistInsights(req, res) {
-    const token = req.session.access_token;
+    const token = req.cookies.token;
+    if (!token) {return res.status(401).json({ error: "Get Artist Insights Token Unauthorized" })};
 
-    if (!token) {
-        return res.status(401).json({ error: "Get Artist Insights Unauthorized" });
+    const {userId, spotifyToken} = await getSpotifyToken(req);
+    if (!spotifyToken) {
+        return res.status(401).json({ error: "Get Artist Insights Spotify Token Unauthorized" });
     }
 
     try {
-        const recentlyPlayed = await getRecentlyPlayed(req, token);
+        const recentlyPlayed = await getRecentlyPlayed(userId, spotifyToken);
         const allTracks = recentlyPlayed.allTracks;
         const allArtistsID = getArtistIDList(allTracks);
-        const allArtists = await getArtistInfo(token, allArtistsID);
+        const allArtists = await getArtistInfo(spotifyToken, allArtistsID);
 
         const {repeatedArtists, skippedArtists} = getRepeatedSkipped(allTracks, getArtistID);
         const mostRepeatedArtist = getMostRepeatedOrSkipped(allArtists, repeatedArtists, 'repeated');

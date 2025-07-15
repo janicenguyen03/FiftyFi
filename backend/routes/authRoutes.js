@@ -2,12 +2,16 @@ import express from "express";
 import env from "dotenv";
 import axios from "axios";
 import querystring from "querystring";
-import isAuthenticated from "../middlewares/authMiddleware.js";
+import jwt from "jsonwebtoken";
+import jwtAuth from "../middlewares/jwtAuth.js";
+// import isAuthenticated from "../middlewares/authMiddleware.js";
+import redisClient from "../middlewares/redisClient.js";
 
 const router = express.Router();
 
 env.config();
 
+const JWT_SECRET = process.env.JWT_SECRET;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
@@ -37,8 +41,7 @@ router.get("/callback", async (req, res) => {
 
     try {
     const response = await axios.post(
-      TOKEN_URL,
-      querystring.stringify({
+      TOKEN_URL, querystring.stringify({
         code: code,
         redirect_uri: REDIRECT_URI,
         grant_type: "authorization_code",
@@ -53,7 +56,6 @@ router.get("/callback", async (req, res) => {
     );
 
     const access_token = response.data.access_token;
-    const refresh_token = response.data.refresh_token;
 
     const userResponse = await axios.get(USER_URL, {
       headers: {
@@ -63,29 +65,34 @@ router.get("/callback", async (req, res) => {
 
     const userData = userResponse.data;
 
-    req.session.user = {
-      id: userData.id,
-      display_name: userData.display_name,
-      profile_picture: userData.images.length > 0 ? userData.images[0].url : null,
-    }
+    const payload = {
+        id: userData.id,
+        display_name: userData.display_name,
+        profile_picture: userData.images.length > 0 ? userData.images[0].url : null,
+    };
 
-    req.session.access_token = access_token;
-    req.session.refresh_token = refresh_token;
-
-    req.session.playlistSaveCounts = 0;
-    req.session.cachedRecentlyPlayed = null;
-    req.session.lastFetchedTime = null;
-
-    // res.redirect(`${FRONTEND_URL}/home`);
+    const accessToken = jwt.sign(payload, JWT_SECRET, {expiresIn: "1h"});
+    const refreshToken = jwt.sign(payload, JWT_SECRET, {expiresIn: "7d"});
     
-    req.session.save(err => {
-      if (err) {
-        console.error("Error saving session:", err);
-        return res.status(500).send("Session error");
-      }
-      console.log("Session saved successfully");
-      res.redirect(`${FRONTEND_URL}/home`);
+    res.cookie("token", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        maxAge: 60 * 60 * 1000, // 1 hour
     });
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        path: "/api/auth/refresh"
+    });
+
+    await redisClient.set(`spotify:${userData.id}`, access_token, { EX: 3600 }); // expires in 1 hour
+
+    console.log("Redirecting to home page");
+
+    res.redirect(`${FRONTEND_URL}/home`);
 
   } catch (error) {
     console.error("Error getting token: ", error);
@@ -93,17 +100,64 @@ router.get("/callback", async (req, res) => {
   }
 });
 
-router.get("/me", isAuthenticated, (req, res) => {
-  const user = req.session.user;
+router.post("/refresh", (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+        return res.status(401).json({ error: "No refresh token provided" });
+    }
+
+    try {
+        const payload = jwt.verify(refreshToken, JWT_SECRET);
+        if (!payload) {
+            return res.status(401).json({ error: "Invalid refresh token" });
+        };
+
+        const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+        const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+
+        if (req.cookies.refreshToken) {
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+                path: "/api/auth/refresh"
+            })
+        };
+
+        res.json({ accessToken, refreshToken });
+    } catch (error) {
+        console.error("Error refreshing token: ", error);
+        res.status(401).json({ error: "Invalid refresh token" });
+    }
+});
+
+router.get("/me", jwtAuth, (req, res) => {
+  const user = req.user;
   res.json({
     name: user.display_name,
     profilePicture: user.profile_picture,
   })
 });
 
-router.get("/logout", (req, res) => {
-  req.session = null;
-  res.redirect(`${FRONTEND_URL}`);
-});
+// router.get("/logout", (req, res) => {
+//   req.session = null;
+//   res.redirect(`${FRONTEND_URL}`);
+// });
+
+router.post("/logout", (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+    })
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        path: "/api/auth/refresh"
+    });
+    return res.sendStatus(204);
+})
 
 export default router;
