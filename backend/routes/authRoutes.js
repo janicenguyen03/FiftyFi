@@ -4,7 +4,6 @@ import axios from "axios";
 import querystring from "querystring";
 import jwt from "jsonwebtoken";
 import jwtAuth from "../middlewares/jwtAuth.js";
-// import isAuthenticated from "../middlewares/authMiddleware.js";
 import redisClient from "../middlewares/redisClient.js";
 
 const router = express.Router();
@@ -77,14 +76,14 @@ router.get("/callback", async (req, res) => {
     res.cookie("token", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         maxAge: 60 * 60 * 1000, // 1 hour
     });
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         path: "/api/auth/refresh"
     });
 
@@ -120,7 +119,7 @@ router.post("/refresh", (req, res) => {
             res.cookie("refreshToken", refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+                sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
                 path: "/api/auth/refresh"
             })
         };
@@ -139,11 +138,6 @@ router.get("/me", jwtAuth, (req, res) => {
     profilePicture: user.profile_picture,
   })
 });
-
-// router.get("/logout", (req, res) => {
-//   req.session = null;
-//   res.redirect(`${FRONTEND_URL}`);
-// });
 
 router.post("/logout", (req, res) => {
     res.clearCookie("token", {
