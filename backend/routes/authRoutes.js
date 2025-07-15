@@ -40,18 +40,18 @@ router.get("/callback", async (req, res) => {
 
     try {
     const response = await axios.post(
-      TOKEN_URL, querystring.stringify({
-        code: code,
-        redirect_uri: REDIRECT_URI,
-        grant_type: "authorization_code",
-      }),
-      {
-        headers: {
-          Authorization: `Basic ${Buffer.from(
-            `${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64")}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
+        TOKEN_URL, querystring.stringify({
+            code: code,
+            redirect_uri: REDIRECT_URI,
+            grant_type: "authorization_code",
+        }),
+        {
+            headers: {
+            Authorization: `Basic ${Buffer.from(
+                `${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64")}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+            },
+        }
     );
 
     const access_token = response.data.access_token;
@@ -76,14 +76,14 @@ router.get("/callback", async (req, res) => {
     res.cookie("token", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
         maxAge: 60 * 60 * 1000, // 1 hour
     });
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
         path: "/api/auth/refresh"
     });
 
@@ -119,7 +119,7 @@ router.post("/refresh", (req, res) => {
             res.cookie("refreshToken", refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+                sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
                 path: "/api/auth/refresh"
             })
         };
@@ -132,11 +132,11 @@ router.post("/refresh", (req, res) => {
 });
 
 router.get("/me", jwtAuth, (req, res) => {
-  const user = req.user;
-  res.json({
-    name: user.display_name,
-    profilePicture: user.profile_picture,
-  })
+    const user = req.user;
+    res.json({
+        name: user.display_name,
+        profilePicture: user.profile_picture,
+    });
 });
 
 router.post("/logout", (req, res) => {
