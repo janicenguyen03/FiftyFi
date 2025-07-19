@@ -39,64 +39,78 @@ router.get("/callback", async (req, res) => {
     const code = req.query.code || null;
 
     try {
-    const response = await axios.post(
-        TOKEN_URL, querystring.stringify({
-            code: code,
-            redirect_uri: REDIRECT_URI,
-            grant_type: "authorization_code",
-        }),
-        {
-            headers: {
-            Authorization: `Basic ${Buffer.from(
-                `${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64")}`,
-            "Content-Type": "application/x-www-form-urlencoded",
-            },
+        const response = await axios.post(
+            TOKEN_URL, querystring.stringify({
+                code: code,
+                redirect_uri: REDIRECT_URI,
+                grant_type: "authorization_code",
+            }),
+            {
+                headers: {
+                Authorization: `Basic ${Buffer.from(
+                    `${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64")}`,
+                "Content-Type": "application/x-www-form-urlencoded",
+                },
+            }
+        );
+
+        const access_token = response.data.access_token;
+
+        let userResponse;
+        try {
+            userResponse = await axios.get(USER_URL, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 401) {
+                    return res.status(401).send("Unauthorized account");
+                }
+                if (error.response.status === 429) {
+                    return res.status(429).send("Out of token (rate limited)");
+                }
+            }
+            return res.status(500).send("Error fetching user profile");
         }
-    );
 
-    const access_token = response.data.access_token;
+        const userData = userResponse.data;
 
-    const userResponse = await axios.get(USER_URL, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
+        const payload = {
+            id: userData.id,
+            display_name: userData.display_name,
+            profile_picture: userData.images.length > 0 ? userData.images[0].url : null,
+        };
 
-    const userData = userResponse.data;
+        const accessToken = jwt.sign(payload, JWT_SECRET, {expiresIn: "1h"});
+        const refreshToken = jwt.sign(payload, JWT_SECRET, {expiresIn: "7d"});
+        
+        res.cookie("token", accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+            maxAge: 60 * 60 * 1000, // 1 hour
+        });
 
-    const payload = {
-        id: userData.id,
-        display_name: userData.display_name,
-        profile_picture: userData.images.length > 0 ? userData.images[0].url : null,
-    };
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+            path: "/api/auth/refresh"
+        });
 
-    const accessToken = jwt.sign(payload, JWT_SECRET, {expiresIn: "1h"});
-    const refreshToken = jwt.sign(payload, JWT_SECRET, {expiresIn: "7d"});
-    
-    res.cookie("token", accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-        maxAge: 60 * 60 * 1000, // 1 hour
-    });
+        await redisClient.set(`spotify:${userData.id}`, access_token, { EX: 3600 }); // expires in 1 hour
 
-    res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-        path: "/api/auth/refresh"
-    });
+        console.log("Redirecting to home page");
 
-    await redisClient.set(`spotify:${userData.id}`, access_token, { EX: 3600 }); // expires in 1 hour
+        res.redirect(`${FRONTEND_URL}/home`);
 
-    console.log("Redirecting to home page");
+    } catch (error) {
+        console.error("Error getting token: ", error);
 
-    res.redirect(`${FRONTEND_URL}/home`);
-
-  } catch (error) {
-    console.error("Error getting token: ", error);
-    res.status(500).send("Authenticaiton failed");
-  }
+        res.status(500).send("Authentication failed");
+    }
 });
 
 router.post("/refresh", (req, res) => {

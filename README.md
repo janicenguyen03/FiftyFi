@@ -2,8 +2,8 @@
 
 FiftyFi is a music analytics tool that helps you gain insights into your listening habits by tracking your last 50 played tracks and analyzing your top items from the past month.
 
-- **Live Frontend:** https://fiftyfi.vercel.app/ (Deployed with Vercel)
-- **Live Backend:** https://fiftyfi.onrender.com (Deployed with Render)
+- **Live Frontend:** https://www.fiftyfi.app (Deployed with Vercel)
+- **Live Backend:** https://api.fiftyfi.app (Deployed with Render)
 
 ## Categories:
 
@@ -16,14 +16,19 @@ FiftyFi is a music analytics tool that helps you gain insights into your listeni
 
 - **Latest Played Track:** Instantly view the most recently played track on the home page.
 - **Playlist Popularity:** See the total number of times your playlists have been saved by other users.
+- **Top Tracks (Last Month):** Explore your most played tracks from the last month.
 - **Top Artists (Last Month):** Discover your most listened-to artists over the past month.
 - **Track Analysis (Last 50 Tracks):**
-    - Most repeated tracks and artists
-    - Most skipped tracks and artists
-    - "Love-Hate" tracks and artists (frequently played but often skipped)
-    - Most featured artists
+    - Most repeated tracks - only display if there is one
+    - Most skipped tracks - only display if there is one
+    - "Love-Hate" tracks (frequently played but often skipped) - only display if there is one
+    - Most mainstream and most underrated tracks
+- **Artist Analysis (Last 50 Tracks):**
+    - Most repeated artists - only display if there is one
+    - Most skipped artists - only display if there is one
+    - "Love-Hate" artists (frequently played but often skipped) - only display if there is one
+    - Most featured artists - only display if there is one
     - Most mainstream and most underrated artists
-- **Top Tracks (Last Month):** Explore your most played tracks from the last month.
 - **Listening Patterns by Time of Day:**
     - Percentage of listening before and after 12pm
     - Total listening time before and after 12pm, and overall
