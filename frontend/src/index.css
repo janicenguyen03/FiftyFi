@@ -49,7 +49,7 @@
 
     /* Home Page */
     .home-card-btn {
-        @apply  lg:px-64 lg:py-24 sm:py-20 sm:px-32 p-10
+        @apply  lg:px-64 lg:py-24 sm:py-20 sm:px-32 p-8
         bg-gradient-to-tr from-emerald-900/70 to-neutral-900/50
         transition duration-300 ease-in-out text-center
         shadow-lg shadow-emerald-900/30 cursor-pointer sm:text-xl text-lg font-medium;
@@ -88,7 +88,7 @@
 
     /* main category */
     .category-page {
-        @apply background h-screen text-white flex flex-col items-center justify-center gap-4;
+        @apply background h-screen text-white flex flex-col items-center justify-center sm:gap-4;
     }
     .category-page .header {
         @apply flex flex-row items-center justify-center w-full pb-2;
@@ -97,7 +97,7 @@
         @apply text-4xl font-extrabold pb-2;
     }
     .category-page p {
-        @apply text-3xl md:text-4xl font-tangerine sm:mb-16 mb-3;
+        @apply text-3xl md:text-4xl font-tangerine sm:mb-16 mb-8;
     }
 
     .home-btn {

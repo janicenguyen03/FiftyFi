@@ -12,7 +12,7 @@ function Login() {
             <p className="lg:text-xl text-lg mt-16 text-neutral-200">
                 @ {new Date().getFullYear()} Developed by Janice Nguyen.
             </p>
-            <footer className="absolute bottom-8 font-semibold text-gray-300 text-md">
+            <footer className="absolute bottom-8 font-semibold text-gray-300 sm:text-md text-center justify-center items-center px-3">
                 This app uses the Spotify Web API but is not affiliated with or endorsed by Spotify.
             </footer>
         </div>
