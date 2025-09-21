@@ -1,19 +1,3 @@
-// function getTrackDetail(item, count, type) {
-//     if (item) {
-//         return {
-//             id: item.track.id,
-//             name: item.track.name,
-//             artists: item.track.artists.map(artist => artist.name).join(", "),
-//             album: item.track.album.name,
-//             image: item.track.album.images[0]?.url,
-//             spotifyUrl: item.track.external_urls.spotify,
-//             release: item.track.album.release_date,
-//             duration: item.track.duration_ms,
-//             count,
-//             type,
-//         };
-//     }};
-
 import { useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
 // import { motion, AnimatePresence } from "framer-motion";
@@ -40,7 +24,7 @@ function TrackCard({ data, onRevealComplete }) {
         </div>
         ) },
         { key: "artists", render: () => (
-            <div className="text-md">
+            <div className="sm:text-md text-sm">
                 {data.content.artists.length > 1 ? (
                     <span className="font-bold">Artists: </span>
                 ) : (
@@ -52,25 +36,25 @@ function TrackCard({ data, onRevealComplete }) {
         { key: "count", render: () => {
             if (data.content.count !== undefined && data.content.count !== null) {
                 if (data.type === "Most Repeated Track") {
-                    return <div>In last 50 tracks, you have repeated this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                    return <div className="subtitle">In last 50 tracks, you have repeated this track <span className="font-bold">{data.content.count} time(s).</span></div>;
                 } else if (data.type === "Most Skipped Track") {
-                    return <div>In last 50 tracks, you have skipped this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                    return <div className="subtitle">In last 50 tracks, you have skipped this track <span className="font-bold">{data.content.count} time(s).</span></div>;
                 } else if (data.type === "Love Hate Track") {
                     return
                 }  else if (data.type === "Most Mainstream Track") {
-                    return <div><span className="font-bold">Popularity:</span> {data.content.count}</div>
+                    return <div className="subtitle"><span className="font-bold">Popularity:</span> {data.content.count}</div>
                 } else if (data.type === "Most Underrated Track") {
-                    return <div><span className="font-bold">Popularity:</span> {data.content.count}</div>;
+                    return <div className="subtitle"><span className="font-bold">Popularity:</span> {data.content.count}</div>;
                 } else if (data.type === "Most Repeated Track After 12PM") {
-                    return <div>During this time, you have repeated this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                    return <div className="subtitle">During this time, you have repeated this track <span className="font-bold">{data.content.count} time(s).</span></div>;
                 } else if (data.type === "Most Skipped Track After 12PM") {
-                    return <div>During this time, you have skipped this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                    return <div className="subtitle">During this time, you have skipped this track <span className="font-bold">{data.content.count} time(s).</span></div>;
                 } else if (data.type === "Most Repeated Track Before 12PM") {
-                    return <div>During this time, you have repeated this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                    return <div className="subtitle">During this time, you have repeated this track <span className="font-bold">{data.content.count} time(s).</span></div>;
                 } else if (data.type === "Most Skipped Track Before 12PM") {
-                    return <div>During this time, you have skipped this track <span className="font-bold">{data.content.count} time(s).</span></div>;
-                } 
-                return <div>Count: {data.content.count}</div>;
+                    return <div className="subtitle">During this time, you have skipped this track <span className="font-bold">{data.content.count} time(s).</span></div>;
+                }
+                return <div className="subtitle">Count: {data.content.count}</div>;
                 }
             return null;
         }},

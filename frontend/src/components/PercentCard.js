@@ -17,7 +17,7 @@ function PercentCard({ data, onRevealComplete }) {
     return (
         <div className="time-card">
             <div className="title"><h1>{data.type}</h1></div>
-            <div className="general mt-5 lg:mt-10">
+            <div className="general sm:mt-5 lg:mt-10">
                 <div className="num">{data.content}%</div>
                 <div className="content">
                     For your last 50 tracks, you have spent <span className="font-bold">{data.content}%</span> of the time listening to Spotify {timeSlot}.

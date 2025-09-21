@@ -45,7 +45,7 @@ function PlayTrack({ track }) {
                 <div className="tooltip bottom-full">Open in Spotify</div>
               </div>
             </div>
-            <p className="text-neutral-400 lg:text-lg">{track.artists}</p>
+            <p className="text-neutral-400 text-sm md:text-lg">{track.artists}</p>
 
             {/* Preview Url for further implementation */}
             {/* {track.previewUrl && (

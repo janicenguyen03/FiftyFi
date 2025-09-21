@@ -6,7 +6,8 @@ import Profile from "../components/Profile";
 import PlayTrack from "../components/PlayTrack";
 
 function Home() {
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+  const BACKEND_URL =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -74,22 +75,22 @@ function Home() {
     } catch (error) {
       console.error("Logout failed:", error);
     }
-  };
+  }
 
   if (loading) {
     return null;
   }
 
   return (
-    <div className="p-10 min-h-screen md:h-screen background text-neutral-100">
+    <div className="sm:p-10 p-5 min-h-screen md:h-screen background text-neutral-100">
       <div className="lg:max-w-screen-xl max-w-screen-md mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center sm:mb-8">
           <div className="flex items-center">
-            <h1 className="text-5xl font-bold">
+            <h1 className="md:text-5xl sm:text-3xl text-2xl font-bold">
               <img
                 src={process.env.PUBLIC_URL + "white-icon.png"}
-                className="w-12 h-12 inline-block mr-5 mb-4"
+                className="md:w-12 md:h-12 sm:w-8 sm:h-8 w-6 h-6 inline-block sm:mr-5 sm:mb-4 mr-2 mb-2"
                 alt="Janice Nguyen Logo"
               />
               FiftyFi
@@ -102,16 +103,22 @@ function Home() {
         <div className="flex-grow flex items-center justify-center">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl lg:my-7 py-10 mx-auto">
             <PlayTrack track={lastTrack} />
-            <div onClick={() => navigate("/tracks")}
-              className="home-card home-card-btn">
+            <div
+              onClick={() => navigate("/tracks")}
+              className="home-card home-card-btn"
+            >
               Trackify
             </div>
-            <div onClick={() => navigate("/time")}
-              className="home-card home-card-btn">
+            <div
+              onClick={() => navigate("/time")}
+              className="home-card home-card-btn"
+            >
               Timify
             </div>
-            <div onClick={() => navigate("/artists")}
-              className="home-card home-card-btn">
+            <div
+              onClick={() => navigate("/artists")}
+              className="home-card home-card-btn"
+            >
               Artify
             </div>
           </div>
@@ -119,11 +126,11 @@ function Home() {
       </div>
 
       {/* Footer */}
-      <div className="flex flex-col items-center justify-center mt-18 pt-36 lg:pt-0">
+      <div className="absolute lg:bottom-10 bottom-4 left-0 right-0 mx-auto flex flex-col items-center justify-center">
         <button className="btn" onClick={handleLogout}>
           Logout
         </button>
-        <footer className="font-bold text-gray-300 text-md text-center mt-auto">
+        <footer className="md:font-bold font-light text-gray-300 md:text-md text-sm text-center">
           @ {new Date().getFullYear()} Developed by Janice. All rights reserved.
         </footer>
       </div>

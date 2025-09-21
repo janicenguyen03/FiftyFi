@@ -27,7 +27,7 @@ function ArtistCard({ data, onRevealComplete }) {
         ) },
         { key: "genres", render: () =>
         Array.isArray(data.content.genres) && data.content.genres.length > 0 ? (
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="flex flex-wrap justify-center gap-2 mt-2">
             {data.content.genres.map((genre) => (
                 <span key={genre}
                     className="px-3 py-1 rounded-full bg-black/50 text-white text-sm
@@ -39,17 +39,17 @@ function ArtistCard({ data, onRevealComplete }) {
         { key: "count", render: () => {
             if (data.content.count !== undefined && data.content.count !== null) {
             if (data.type === "Most Repeated Artist") {
-                return <div>In last 50 tracks, you have repeated this artist <span className="font-bold">{data.content.count} time(s).</span></div>;
+                return <div className="subtitle">In last 50 tracks, you have repeated this artist <span className="font-bold">{data.content.count} time(s).</span></div>;
             } else if (data.type === "Most Skipped Artist") {
-                return <div>In last 50 tracks, you have skipped this artist <span className="font-bold">{data.content.count} time(s).</span></div>;
+                return <div className="subtitle">In last 50 tracks, you have skipped this artist <span className="font-bold">{data.content.count} time(s).</span></div>;
             } else if (data.type === 'Love Hate Artist') {
                 return
             } else if (data.type === 'Most Featured Artist') {
-                return <div>In last 50 tracks, this artist has been featured in your playlists <span className="font-bold">{data.content.count} time(s).</span></div>;
+                return <div className="subtitle">In last 50 tracks, this artist has been featured <span className="font-bold">{data.content.count} time(s).</span></div>;
             } else if (data.type === 'Most Mainstream Artist') {
-                return <div><span className="font-bold">Popularity:</span> {data.content.count}</div>
+                return <div className="subtitle"><span className="font-bold">Popularity:</span> {data.content.count}</div>
             } else if (data.type === 'Most Underrated Artist') {
-                return <div><span className="font-bold">Popularity:</span> {data.content.count}</div>;
+                return <div className="subtitle"><span className="font-subtitle">Popularity:</span> {data.content.count}</div>;
             }
             return <div>Count: {data.content.count}</div>;
             }
