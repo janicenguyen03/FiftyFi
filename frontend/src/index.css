@@ -21,7 +21,7 @@
 
     /* General */
     .background {
-        @apply bg-dark-base bg-custom-mesh-dark sm:min-h-screen sm:max-h-none sm:h-full overflow-hidden
+        @apply bg-dark-base bg-custom-mesh-dark sm:min-h-screen sm:max-h-none sm:h-full max-h-screen
     }
 
     .btn {
@@ -97,7 +97,7 @@
         @apply text-4xl font-extrabold pb-2;
     }
     .category-page p {
-        @apply text-3xl md:text-4xl font-tangerine sm:mb-16 mb-8;
+        @apply text-3xl md:text-4xl font-tangerine sm:mb-16 mb-10;
     }
 
     .home-btn {
@@ -126,9 +126,9 @@
         bg-gradient-to-br from-neutral-900 to-neutral-800
         rounded-lg shadow-lg shadow-emerald-900/30
         whitespace-nowrap text-2xl tracking-wider
-        transition duration-700 ease-in-out font-thin
+        transition duration-700 ease-in-out font-thin 
         px-5 py-60 sm:px-56 sm:py-64 md:px-64 md:py-36
-        lg:px-96 lg:py-44 mb-10 sm:mb-20;
+        lg:px-96 lg:py-44 mb-20;
     }
     .front-side:hover {
         @apply bg-gradient-to-br from-neutral-800 to-neutral-900
