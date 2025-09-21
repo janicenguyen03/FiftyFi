@@ -49,7 +49,7 @@
 
     /* Home Page */
     .home-card-btn {
-        @apply  lg:px-64 lg:py-24 sm:py-20 sm:px-32 p-12
+        @apply  lg:px-64 lg:py-24 sm:py-20 sm:px-32 p-10
         bg-gradient-to-tr from-emerald-900/70 to-neutral-900/50
         transition duration-300 ease-in-out text-center
         shadow-lg shadow-emerald-900/30 cursor-pointer sm:text-xl text-lg font-medium;
@@ -97,7 +97,7 @@
         @apply text-4xl font-extrabold pb-2;
     }
     .category-page p {
-        @apply text-3xl md:text-4xl font-tangerine sm:mb-16 mb-10;
+        @apply text-3xl md:text-4xl font-tangerine sm:mb-16 mb-3;
     }
 
     .home-btn {
@@ -144,14 +144,14 @@
     }
 
     .subtitle {
-        @apply sm:text-sm text-[12px] sm:mt-0 my-3
+        @apply sm:text-sm text-[12px] sm:mt-0 my-2
     }
     
     /* Analysis Card */
     .analysis-card {
         @apply  flex-col flex cursor-pointer
         border-2 border-neutral-300/20 bg-emerald-900/70
-        rounded-lg lg:min-h-[430px] sm:min-h-[340px] min-h-[560px]
+        rounded-lg lg:min-h-[430px] sm:min-h-[340px] min-h-[540px]
     }
     .analysis-card .title {
         @apply text-center text-2xl font-bold
@@ -174,13 +174,13 @@
         @apply sm:text-xl text-lg lg:text-2xl font-semibold italic font-ancizar
     }
     .click-to-reveal {
-        @apply absolute bottom-1 sm:right-3 sm:left-auto left-1 sm:text-sm text-[12px] text-neutral-300/50 sm:text-neutral-300 italic
+        @apply absolute bottom-1 sm:right-3 sm:left-auto sm:pt-0 pt-3 left-1 sm:text-sm text-[12px] text-neutral-300/50 sm:text-neutral-300 italic
     }
 
     /* Time Card */
     .time-card {
         @apply border-2 border-neutral-300/20 bg-emerald-900/70
-        rounded-lg lg:min-h-[430px] sm:min-h-[340px] min-h-[560px] cursor-pointer
+        rounded-lg lg:min-h-[430px] sm:min-h-[340px] min-h-[540px] cursor-pointer
     }
     .time-card .title {
         @apply text-center text-2xl font-bold

@@ -27,11 +27,11 @@ function ArtistCard({ data, onRevealComplete }) {
         ) },
         { key: "genres", render: () =>
         Array.isArray(data.content.genres) && data.content.genres.length > 0 ? (
-            <div className="flex flex-wrap justify-center gap-2 mt-2">
+            <div className="flex flex-wrap justify-center gap-2 mt-2 sm:mb-0">
             {data.content.genres.map((genre) => (
                 <span key={genre}
-                    className="px-3 py-1 rounded-full bg-black/50 text-white text-sm
-                    font-semibold hover:bg-neutral-100/20 transition"
+                    className="px-3 sm:py-1 rounded-full bg-black/50 text-white text-sm
+                    sm:font-semibold hover:bg-neutral-100/20 transition"
                 >{genre}</span>
             ))}
             </div>
