@@ -128,7 +128,7 @@
         whitespace-nowrap text-2xl tracking-wider
         transition duration-700 ease-in-out font-thin
         px-5 py-60 sm:px-56 sm:py-64 md:px-64 md:py-36
-        lg:px-96 lg:py-44 mb-20;
+        lg:px-96 lg:py-44 mb-10 sm:mb-20;
     }
     .front-side:hover {
         @apply bg-gradient-to-br from-neutral-800 to-neutral-900
