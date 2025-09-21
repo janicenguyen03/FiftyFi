@@ -80,7 +80,7 @@
         @apply sm:w-1/4 w-1/5 rounded mx-3;
     }
     .play-track-card .general {
-        @apply flex gap-4 lg:gap-6 place-items-center flex-row px-6 sm:py-8 py-8 lg:p-10;
+        @apply flex gap-4 lg:gap-6 place-items-center flex-row px-6 sm:py-8 py-5 lg:p-10;
     }
     .play-track-card h2 {
         @apply lg:text-lg font-semibold lg:font-bold;
