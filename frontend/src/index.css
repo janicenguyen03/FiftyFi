@@ -21,7 +21,7 @@
 
     /* General */
     .background {
-        @apply bg-dark-base bg-custom-mesh-dark min-h-screen h-full
+        @apply bg-dark-base bg-custom-mesh-dark sm:min-h-screen sm:h-full h-screen
     }
 
     .btn {
