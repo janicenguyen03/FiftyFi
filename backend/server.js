@@ -23,39 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-// let sessionOptions = {
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: false,
-// };
-
 app.set('trust proxy', 1);
-
-// if (process.env.NODE_ENV === "production") {
-//   console.log("Production mode");
-//   const redisClient = createClient({ url: process.env.REDIS_URL });
-//   await redisClient.connect();
-
-//   console.log("Redis client connected");
-//   // const RedisStore = connectRedis(session);
-
-//   app.use(session({
-//     ...sessionOptions,
-//     name: '__Host-sid',
-//     cookie: { 
-//       maxAge: 24 * 60 * 60 * 1000,
-//       secure: true, 
-//       sameSite: "none",
-//       httpOnly: true,
-//       partitioned: true },
-//     store: new RedisStore({ 
-//       client: redisClient,
-//       prefix: 'session:',
-//     }),
-//   }));
-// } else {
-//   app.use(session(sessionOptions));
-// }
 
 const PORT = process.env.PORT || 5000;
 
@@ -65,9 +33,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/', authRoutes);
-// app.get("/api/check-session", (req,res) => {
-//   res.json({session: req.session});
-// });
 
 app.use('/api/home', homeRoutes);
 app.use('/api/tracks', trackRoutes);

@@ -2,6 +2,7 @@ import express from "express";
 import env from "dotenv";
 import axios from "axios";
 import querystring from "querystring";
+import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import jwtAuth from "../middlewares/jwtAuth.js";
 import redisClient from "../middlewares/redisClient.js";
@@ -20,40 +21,80 @@ const USER_URL = "https://api.spotify.com/v1/me";
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
 const AUTH_URL = "https://accounts.spotify.com/authorize?";
 
+function base64url(buffer) {
+    return buffer.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+};
+
+function generateCodeVerifier() {
+    return base64url(crypto.randomBytes(64));
+};
+
+function generateCodeChallenge(codeVerifier) {
+    const hash = crypto.createHash("sha256").update(codeVerifier).digest();
+    return base64url(hash);
+};
+
 router.get("/login", (req, res) => {
     const scopes =
         "user-top-read user-read-recently-played user-follow-read \
         user-read-currently-playing playlist-read-private playlist-read-collaborative";
 
-    res.redirect(AUTH_URL +
-            querystring.stringify({
-                response_type: "code",
-                client_id: CLIENT_ID,
-                scope: scopes,
-                redirect_uri: REDIRECT_URI,
-        })
-    );
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = generateCodeChallenge(codeVerifier);
+    const state = crypto.randomBytes(16).toString("hex");
+
+    res.cookie("pkce_verifier", codeVerifier, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 5 * 60 * 1000,
+    });
+
+    const authUrl =
+      AUTH_URL +
+      querystring.stringify({
+        response_type: "code",
+        client_id: CLIENT_ID,
+        scope: scopes,
+        redirect_uri: REDIRECT_URI,
+        state,
+        code_challenge: codeChallenge,
+        code_challenge_method: "S256",
+      });
+
+    res.redirect(authUrl);
 });
 
 router.get("/callback", async (req, res) => {
     const code = req.query.code || null;
+    const state = req.query.state || null;
 
     try {
+        const codeVerifier = req.cookies.pkce_verifier;
+
+        if (!codeVerifier) {
+            return res.status(400).send("Code verifier missing");
+        }
+
         const response = await axios.post(
-            TOKEN_URL, querystring.stringify({
+            TOKEN_URL,
+            querystring.stringify({
+                grant_type: "authorization_code",
                 code: code,
                 redirect_uri: REDIRECT_URI,
-                grant_type: "authorization_code",
+                client_id: CLIENT_ID,           // include client_id
+                code_verifier: codeVerifier,
             }),
             {
                 headers: {
-                Authorization: `Basic ${Buffer.from(
-                    `${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64")}`,
-                "Content-Type": "application/x-www-form-urlencoded",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    Authorization: `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64")}`,
                 },
             }
         );
 
+        res.clearCookie("pkce_verifier");
+        
         const access_token = response.data.access_token;
 
         let userResponse;
